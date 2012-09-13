@@ -28,7 +28,7 @@ var Navigation = new Class({
 			"{\n" +
 			"list-style-type:none;\n" +
 			"}\n" +
-			"a:link,a:visited\n" +
+			"a.navi_item:link,a.navi_item:visited\n" +
 			"{\n" +
 			"display:block;\n" +
 			"width:120px;\n" +
@@ -41,16 +41,17 @@ var Navigation = new Class({
 			"text-decoration:none;\n" +
 			"text-transform:uppercase;\n" +
 			"}\n" +
-			"a:hover,a:active\n" +
+			"a.navi_item:hover,a.navi_item:active\n" +
 			"{\n" +
 			"background-color:#7A991A;\n" +
+			"border-top-left-radius: 0px\n" +
 			"}";
 		 	return cssStyle;
 		 
 		},
 
 		adaptNavibar: function () {
-			var naviBarCSS = new Element ('style', {
+			var naviBarCSS = new Element ("style", {
 				type: "text/css",
 				html: this.getCSSStyle(),
 			});
