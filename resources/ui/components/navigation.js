@@ -11,6 +11,7 @@ var Navigation = new Class({
 		docs = new Array();
 		documents.forEach(function(dataItem){
 			docs = docs.append([scope.getDataItem(dataItem)]);
+	
 		});
 
 		
@@ -31,6 +32,7 @@ var Navigation = new Class({
 			"{\n" +
 			"display:block;\n" +
 			"width:120px;\n" +
+			//"max-width:" + 400/docs.length +";\n"+
 			"font-weight:bold;\n" +
 			"color:#FFFFFF;\n" +
 			"background-color:#98bf21;\n" +
