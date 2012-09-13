@@ -1,40 +1,23 @@
-function build() {
+var Navigation = new Class({
+    initialize: function(name){
+        this.name = name;
+        this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
+       
+    },
+    
+	build : function(){
+		var documents = this.dataItemLoader.getAllDataItems();
+		var scope = this.dataItemLoader;
+		docs = new Array();
+		documents.forEach(function(dataItem){
+			docs = docs.append([scope.getDataItem(dataItem)]);
+	
+		});
 
-	window.addEvent("domready", function() {
-
-		var config = {
-			"navigation" : {
-				"customcss" : "no",
-				"alignment" : "horizontal",
-				"valign" : "top",
-				"halign" : "left",
-				"style" : "somepathtoCSS"
-
-			},
-		};
-
-		var home = {
-			"name" : "home",
-			"label" : "Home",
-			"link" : "index.html",
-			"style" : "placeholder"
-		};
-
-		var about = {
-			"name" : "about",
-			"label" : "About Us",
-			"link" : "about.html",
-			"style" : "placeholder"
-		};
 		
-		var topic1 = {
-				"name" : "topic1",
-				"label" : "Topic1",
-				"link" : "topic1.hmtl",
-				"style" : "placeholder"
-		};
-		
-		function getCSSStyle () {
+	},
+	
+	getCSSStyle: function () {
 		 cssStyle =	"ul\n" +
 			"{\n" +
 			"list-style-type:none;\n" +
@@ -49,6 +32,7 @@ function build() {
 			"{\n" +
 			"display:block;\n" +
 			"width:120px;\n" +
+			//"max-width:" + 400/docs.length +";\n"+
 			"font-weight:bold;\n" +
 			"color:#FFFFFF;\n" +
 			"background-color:#98bf21;\n" +
@@ -63,59 +47,41 @@ function build() {
 			"}";
 		 	return cssStyle;
 		 
-		}
-		
-		function adaptNavibar() {
-			
-			/*$$("#navigation a").setStyle("text-align", "center");
-			$$("#navigation a").setStyle("display", "block");
-			$$("#navigation a").setStyle("width", "120px");
-			$$("#navigation a").setStyle("font-weight", "bold");
-			$$("#navigation a").setStyle("color", "#FFFFFF");
-			$$("#navigation a").setStyle("padding", "4px");
-			$$("#navigation a").setStyle("text-decoration", "none");
-			$$("#navigation a").setStyle("text-transform", "uppercase"); */
-			
-			
-			// ----------- Working code here, setting CSS for NaviAnchors ---------
-			/*var style = document.createElement('style');
-			style.type = 'text/css';
-			style.innerHTML = "ul{list-style-type:none;margin:0;padding:0;overflow:hidden;}li{list-style-type:none;}a:link,a:visited{display:block;width:120px;font-weight:bold;color:#FFFFFF;background-color:#98bf21;text-align:center;padding:4px;text-decoration:none;text-transform:uppercase;}a:hover,a:active{background-color:#7A991A;}";
+		},
 
-			
-			document.getElementsByTagName('head')[0].appendChild(style); */
-			
+		adaptNavibar: function () {
 			var naviBarCSS = new Element ('style', {
 				type: "text/css",
-				html: getCSSStyle(),
-				
+				html: this.getCSSStyle(),
 			});
-			
 			$(document.head).adopt(naviBarCSS);
+		},
+	
+	start: function() {
 
-		}
+		var config = {
+			"navigation" : {
+				"customcss" : "no",
+				"alignment" : "horizontal",
+				"valign" : "top",
+				"halign" : "left",
+				"style" : "somepathtoCSS",
+				"width" : "400px"
+			},
+		};
 		
-			
-			
-			
+		//var module = new Array(home, topic1, about);
 		
-
-		var module = new Array(home, topic1, about);
-
-		// We load all modules now.
-		$("comment").innerHTML = "<br>Loading modules...<br>";
-
-		// Tell how many objects found
-		$("comment").innerHTML = $("comment").innerHTML + "Found "
-				+ module.length + "...<br>";
 		
-
+		
+		var module = docs;
+		
 		// Now we need to display the cool shit :)
 		// Put some cool content into da navigation bar
 
 		// Set the alignment of the whole navigation bar, got properties from
 		// config
-		$("navigation").innerHTML = "<ul>";
+		//$("navigation").innerHTML = "<ul>";
 		var float = "";
 		if (config.navigation.alignment == "horizontal") {
 			if (config.navigation.halign == "right")
@@ -124,36 +90,72 @@ function build() {
 				float = "left";
 		}
 
+		var navBarItemList = new Element ("ul",{
+		});
+
+
+		
+		
 		// Add all elements from the array to the navigation
 		//Decide whether its left- or right-aligned and print each other way around
+		
 		if (float == "left") {
 			for ( var i = 0; i <= module.length - 1; i++) {
-				$("navigation").innerHTML = $("navigation").innerHTML
-						+ "<li id=\"" + module[i].name + "\">" + "<a href=\""
-						+ module[i].link + "\" class=\"navi_item\">" + module[i].label + "</a>"
-						+ "</li>";
-				$(module[i].name).style.cssFloat = float;
+				var navBarItemBullet = new Element ("li", {
+					id: module[i].name,
+					
+				});
+				navBarItemList.adopt(navBarItemBullet);
+				
+				var navBarItemLink = new Element ("a", {
+					href: module[i].link,
+					name: module[i].name,
+					class: "navi_item",
+					html: module[i].label,
+					styles: {
+						float: float,
+					},
+				});
+				navBarItemLink.addEvent("click",function(){
+					alert($(this).name);
+				});
+				navBarItemBullet.adopt(navBarItemLink);
+
 				
 			}
-			$("navigation").innerHTML = $("navigation").innerHTML + "</ul>";
+			
 		} else {
 			for ( var i = module.length - 1; i >= 0; i--) {
-				$("navigation").innerHTML = $("navigation").innerHTML
-						+ "<li id=\"" + module[i].name + "\">" + "<a href=\""
-						+ module[i].link + "\" class=\"navi_item\">"  + module[i].label + "</a>"
-						+ "</li>";
-				$(module[i].name).style.cssFloat = float;
+				var navBarItemBullet = new Element ("li", {
+					id: module[i].name,
+					
+				});
+				navBarItemList.adopt(navBarItemBullet);
+				
+				var navBarItemLink = new Element ("a", {
+					href: module[i].link,
+					name: module[i].name,
+					class: "navi_item",
+					html: module[i].label,
+					styles: {
+						float: float,
+					},
+				});
+				navBarItemLink.addEvent("click",function(){
+					alert($(this).name);
+				});
+				navBarItemBullet.adopt(navBarItemLink);
 				
 			}
-			$("navigation").innerHTML = $("navigation").innerHTML + "</ul>";
+			
 			
 			
 		}
+		$("navigation").adopt(navBarItemList);
+		this.adaptNavibar();
 		
-		adaptNavibar();
 		
-		
+	
 
-
-	});
-}
+	}
+});
