@@ -5,4 +5,5 @@ var Component1 = new Class({
 	isInjected : function(){
 		alert("Successful injected Component1!");
 }
+    
 });
