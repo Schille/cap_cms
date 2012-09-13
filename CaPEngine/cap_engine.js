@@ -38,7 +38,7 @@ var ComponentLoader = new Class({
      * Returns an array of all documents in the given directory.
      */
     getAllAvailableComponents : function(){
-    	var documents = new Array(); 
+    	var documents = new Array();
     	new Request({
     	      method: 'get',
     	      url: this.scriptRoot,
@@ -48,7 +48,7 @@ var ComponentLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("td a").forEach(function(img, index){
+    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
     	    if(index != 0) {
     	    	var doc = img.get('href');
     	    		if(doc.test('.*.js$')){
@@ -62,7 +62,7 @@ var ComponentLoader = new Class({
      * Load all available component scripts into the page's environment.
      */
     loadAllAvailableComponents : function(){
-    	var scope = this
+    	var scope = this;
     	this.getAllAvailableComponents().forEach(function(script){
     		scope.loadScript(script);
     	});

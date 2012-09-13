@@ -1,0 +1,10 @@
+		var config = {
+			"navigation" : {
+				"customcss" : "no",
+				"alignment" : "horizontal",
+				"valign" : "top",
+				"halign" : "left",
+				"style" : "somepathtoCSS"
+
+			},
+		};
