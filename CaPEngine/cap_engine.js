@@ -48,7 +48,7 @@ var ComponentLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
+    	new Element("div", { html: feed }).getElements("td a").forEach(function(img, index){
     	    if(index != 0) {
     	    	var doc = img.get('href');
     	    		if(doc.test('.*.js$')){
@@ -88,7 +88,7 @@ var DataItemLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
+    	new Element("div", { html: feed }).getElements("td a").forEach(function(img, index){
     	    if(index != 0) {
     	    	var doc = img.get('href');
     	    		if(doc.test('.*.json$')){
