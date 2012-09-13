@@ -102,10 +102,10 @@ var DataItemLoader = new Class({
     /**
      * Fetches a DataItem(JSON) document.
      */
-    getDataItem : function(myDocPath){
+    getDataItem : function(myDoc){
     	new Request({
   	      method: 'get',
-  	      url: myDocPath,
+  	      url: this.dataItemRoot + myDoc,
   	      async : false,
   	      onSuccess: function(responseText) {
               feed = responseText;
