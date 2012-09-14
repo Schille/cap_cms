@@ -1,23 +1,10 @@
-var Navigation = new Class({
+Com = new Class({
     initialize: function(name){
         this.name = name;
         this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
        
     },
-    
-	build : function(){
-		var documents = this.dataItemLoader.getAllDataItems();
-		var scope = this.dataItemLoader;
-		docs = new Array();
-		documents.forEach(function(dataItem){
-			docs = docs.append([scope.getDataItem(dataItem)]);
-	
-		});
-
-		
-	},
-	
-	getCSSStyle: function () {
+ 	getCSSStyle: function () {
 		 cssStyle =	"ul\n" +
 			"{\n" +
 			"list-style-type:none;\n" +
@@ -153,9 +140,16 @@ var Navigation = new Class({
 		}
 		$("navigation").adopt(navBarItemList);
 		this.adaptNavibar();
+	},
+	build : function(){
+		var documents = this.dataItemLoader.getAllDataItems();
+		var scope = this.dataItemLoader;
+		docs = new Array();
+		documents.forEach(function(dataItem){
+			docs = docs.append([scope.getDataItem(dataItem)]);
+			
 		
-		
-	
-
-	}
+		});
+		this.start();
+	},
 });

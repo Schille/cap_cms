@@ -5,18 +5,18 @@ function getEngineVersion(){
 	return "v0.1";
 }
 
-LoadedComponents = new Array();
 
+LoadedComponents = new Hash();
 
 var ComponentLoader = new Class({
-    initialize: function(myScriptRoot, myDataItemRoot){
+    initialize: function(myScriptRoot){
         this.scriptRoot = myScriptRoot;
     },
     /**
      * Fetch and inject the given script.
      */
     loadScript : function(myScriptName){
-    	success = false;
+    	script = "";
     	new Request({ 
     		  method: 'get', 
     		  url: this.scriptRoot + myScriptName, 
@@ -26,13 +26,12 @@ var ComponentLoader = new Class({
     		  },
     		  onRequest: function(){ 
     		  }, 
-    		  onSuccess: function(script){ 
-    			  new Element("script", {type : "text/javascript", html : script});
-    			  success = true;
-    			  LoadedComponents = LoadedComponents.append([myScriptName]);
+    		  onSuccess: function(thisscript){ 
+    			  //new Element("script", {type : "text/javascript", html : script});
+    			  script = thisscript;
     		  }
     	  }).send();
-    	return success;
+    	return script;
     },
     /**
      * Returns an array of all documents in the given directory.
@@ -48,7 +47,7 @@ var ComponentLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("td a").forEach(function(img, index){
+    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
     	    if(index != 0) {
     	    	var doc = img.get('href');
     	    		if(doc.test('.*.js$')){
@@ -88,7 +87,7 @@ var DataItemLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("td a").forEach(function(img, index){
+    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
     	    if(index != 0) {
     	    	var doc = img.get('href');
     	    		if(doc.test('.*.json$')){
@@ -114,4 +113,33 @@ var DataItemLoader = new Class({
   	return JSON.decode(feed);
     }
     
+});
+
+var ComponentManager = new Class({
+    Extends : ComponentLoader,
+	initialize: function(myComponentRoot){
+		this.parent(myComponentRoot)
+    },
+    initializeComponent : function(myComponentName){
+    	var script = this.loadScript(myComponentName);
+    	
+    	var component = new Component(myComponentName, script, new Com());
+    	LoadedComponents = LoadedComponents.set(myComponentName, component);
+    	return component;
+    	
+    }
+});
+
+var Component = new Class({
+    initialize: function(myScriptName, myScrip, myInstance){
+        this.ScriptName = myScriptName;
+        this.script = myScrip;
+        this.instance = myInstance;
+    },
+    build : function(){
+    	this.instance.build();
+    },
+    getInstance : function(){
+    	return this.instance;
+    }
 });

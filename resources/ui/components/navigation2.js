@@ -1,4 +1,4 @@
-var Navigation2 = new Class({
+Com = new Class({
     initialize: function(){
     	this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
     },
@@ -117,4 +117,4 @@ var Navigation2 = new Class({
 			$(document.head).adopt(naviBarCSS);
 		},
     
-}); 
+});
