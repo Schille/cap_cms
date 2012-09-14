@@ -3,7 +3,7 @@ Com = new Class({
     	this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
     },
 
-    build : function(){
+    build : function(myContainer){
 		var documents = this.dataItemLoader.getAllDataItems();
 		var scope = this.dataItemLoader;
 		docs = new Array();
@@ -12,7 +12,6 @@ Com = new Class({
 		});
 		navBarItemList = new Element ("ul",{id : "navList"});
 
-		
 		
 		for ( var i = 0; i <= docs.length - 1; i++) {
 			var navBarItemBullet = new Element ("li", {
@@ -25,7 +24,7 @@ Com = new Class({
 			navBarItemList.adopt(navBarItemBullet);
 		}
 		
-		$("navigation").adopt(navBarItemList);
+		$(myContainer).adopt(navBarItemList);
 		this.setListProperties(navBarItemList);
 		this.adaptNavibar();
     },

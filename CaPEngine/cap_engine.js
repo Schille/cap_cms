@@ -4,10 +4,15 @@
 function getEngineVersion(){
 	return "v0.1";
 }
+/**
+ * Stores all loaded components, they are may not built.
+ */
+LoadedComponents = new Array();
 
 
-LoadedComponents = new Hash();
-
+/**
+ * Loader to fetch components from the server
+ */
 var ComponentLoader = new Class({
     initialize: function(myScriptRoot){
         this.scriptRoot = myScriptRoot;
@@ -120,26 +125,38 @@ var ComponentManager = new Class({
 	initialize: function(myComponentRoot){
 		this.parent(myComponentRoot)
     },
-    initializeComponent : function(myComponentName){
+    initializeComponent : function(myComponentName, myContainer){
     	var script = this.loadScript(myComponentName);
-    	
-    	var component = new Component(myComponentName, script, new Com());
-    	LoadedComponents = LoadedComponents.set(myComponentName, component);
+    	var component = new Component(myComponentName, script, new Com(), myContainer);
+    	LoadedComponents = LoadedComponents.append([component]);
     	return component;
     	
     }
 });
 
 var Component = new Class({
-    initialize: function(myScriptName, myScrip, myInstance){
+    initialize: function(myScriptName, myScrip, myInstance, myContainer){
         this.ScriptName = myScriptName;
         this.script = myScrip;
         this.instance = myInstance;
+        this.assigendContainer = myContainer;
     },
     build : function(){
-    	this.instance.build();
+    	this.instance.build(this.assigendContainer);
     },
     getInstance : function(){
     	return this.instance;
     }
 });
+
+function getInitialConfigFile(){
+	new Request({
+	      method: 'get',
+	      url: "config.json",
+	      async : false,
+	      onSuccess: function(responseText) {
+            feed = responseText;
+	      } 
+	    }).send();
+	return JSON.decode(feed);
+}
