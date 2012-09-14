@@ -1,37 +1,27 @@
 /**
  * This is the fancy content panel.
  */ 
-			function firstWords (words) {
-				if (words.length > 400) {
-					for(var i = 400; i <= 420; i++) {
-						if (words.charAt(i) == ' '){
-							return words.substring(0, i);
-						}
-							
-					}
-					
-				}
-				
-			}
+//			function firstWords (words) {
+//				if (words.length > 400) {
+//					for(var i = 400; i <= 420; i++) {
+//						if (words.charAt(i) == ' '){
+//							return words.substring(0, i);
+//						}
+//							
+//					}
+//					
+//				}
+//				
+//			}
 
-var Content = new Class({
+Com = new Class({
     initialize: function(name){
         this.name = name;
         this.dataItemLoader = new DataItemLoader("src/resources/content/article/");
        
     },
     
-	build : function(){
-		var documents = this.dataItemLoader.getAllDataItems();
-		var scope = this.dataItemLoader;
-		docs = new Array();
-		documents.forEach(function(dataItem){
-			docs = docs.append([scope.getDataItem(dataItem)]);
-	
-		});
 
-		
-	},
 	
 	
 	
@@ -51,7 +41,7 @@ var Content = new Class({
 	},
 
 
-	load : function() {
+	load : function(myContainer) {
 		
 		
 		var css = this.getCSSStyle();
@@ -68,7 +58,7 @@ var Content = new Class({
 					"$('anchor').removeEvent('onmousedown');" +
 					"$('anchor').addEvent('click', function() {" +
 					"$('divcont').morph({ width:475, height: 200});" +
-					"$('divcont').html = " + docs[0].text +
+					//"$('divcont').html = " + docs[0].text +
 					"}); ",
 			//onmouseout: "$('divcont').morph({ width: 475, height: 200});"	
 			id: "anchor"
@@ -88,7 +78,7 @@ var Content = new Class({
 
 			
 			style: "position:absolute;  width:475px; height:200px; top:5px; left: 7px;  background-color:#C2E94a; overflow:auto; ",
-			html : firstWords(docs[0].text),
+			html : (docs[0].text),
 				id: "divcont"
 
 		});
@@ -113,11 +103,24 @@ var Content = new Class({
 		});		
 		
 		divHead.adopt(headline);
-		$("content_panel").adopt(content);
 		content.adopt(divContent);
+		myContainer.adopt(content);
 		
 		
 		
-	}
+		
+	},
+	
+	build : function(myContainer){
+		var documents = this.dataItemLoader.getAllDataItems();
+		var scope = this.dataItemLoader;
+		docs = new Array();
+		documents.forEach(function(dataItem){
+			docs = docs.append([scope.getDataItem(dataItem)]);
+		
+		});
+
+		this.load(myContainer);
+	},
 	
 });
