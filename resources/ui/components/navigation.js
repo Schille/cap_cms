@@ -45,7 +45,7 @@ Com = new Class({
 			$(document.head).adopt(naviBarCSS);
 		},
 	
-	start: function() {
+	start: function(myContainer) {
 
 		var config = {
 			"navigation" : {
@@ -139,10 +139,10 @@ Com = new Class({
 			
 			
 		}
-		$("navigation").adopt(navBarItemList);
+		$(myContainer).adopt(navBarItemList);
 		this.adaptNavibar();
 	},
-	build : function(){
+	build : function(myContainer){
 		var documents = this.dataItemLoader.getAllDataItems();
 		var scope = this.dataItemLoader;
 		docs = new Array();
@@ -151,6 +151,6 @@ Com = new Class({
 			
 		
 		});
-		this.start();
+		this.start(myContainer);
 	},
 });
