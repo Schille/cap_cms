@@ -140,6 +140,9 @@ Com = new Class({
 			
 		}
 		$(myContainer).adopt(navBarItemList);
+
+		myContainer.adopt(navBarItemList);
+
 		this.adaptNavibar();
 	},
 	build : function(myContainer){
