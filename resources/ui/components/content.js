@@ -1,18 +1,15 @@
 /**
  * This is the fancy content panel.
  */ 
-//			function firstWords (words) {
-//				if (words.length > 400) {
-//					for(var i = 400; i <= 420; i++) {
-//						if (words.charAt(i) == ' '){
-//							return words.substring(0, i);
-//						}
-//							
-//					}
-//					
-//				}
-//				
-//			}
+			function firstWords (words) {
+				if (words.length > 400) {
+					for(var i = 400; i <= 420; i++) {
+						if (words.charAt(i) == ' '){
+							return words.substring(0, i)+"...";
+						}	
+					}
+				}
+			}
 
 Com = new Class({
     initialize: function(name){
@@ -20,6 +17,7 @@ Com = new Class({
         this.dataItemLoader = new DataItemLoader("src/resources/content/article/");
        
     },
+ 
     
 
 	
@@ -54,16 +52,29 @@ Com = new Class({
 		
 		var readMore = new Element("a", {
 			html: " Read More",
-			onmousedown: " $('divcont').morph({ width:475, height: 400}); " +
-					"$('anchor').removeEvent('onmousedown');" +
-					"$('anchor').addEvent('click', function() {" +
-					"$('divcont').morph({ width:475, height: 200});" +
-					//"$('divcont').html = " + docs[0].text +
-					"}); ",
-			//onmouseout: "$('divcont').morph({ width: 475, height: 200});"	
-			id: "anchor"
+			id: "more"
 			
 		});
+		var readLess = new Element("a", {
+			html: "Close Article",
+			id: "less"
+			
+		});		
+
+		readLess.addEvent('click', function() {
+				$('divcont').morph({ width:475, height:200});
+				$('divcont').set('html', firstWords(docs[0].text) + '<br>');
+				$('divcont').adopt(readMore);
+			});
+		
+		readMore.addEvent('click', function() {
+				$('divcont').morph({ width:475, height:400});
+				$('divcont').set('html', docs[0].text + '<br>');
+				$('divcont').adopt(readLess);
+
+		});
+		
+
 		
 		var divHead = new Element("div", {
 			style: "position:relative; width:475px; height:30px; top:0px; left: 0px;  background-color:#D2F95a",
@@ -77,8 +88,8 @@ Com = new Class({
 			
 
 			
-			style: "position:absolute;  width:475px; height:200px; top:5px; left: 7px;  background-color:#C2E94a; overflow:auto; ",
-			html : (docs[0].text),
+			style: "position:relative;  width:475px; height:200px; top:5px; left: 7px;  background-color:#C2E94a; overflow:auto; ",
+			html : firstWords(docs[0].text),
 				id: "divcont"
 
 		});
@@ -108,6 +119,10 @@ Com = new Class({
 		
 		
 		
+		
+	},
+	
+	changeContent : function () {
 		
 	},
 	
