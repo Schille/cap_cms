@@ -1,8 +1,8 @@
-Com = new Class({
+var Navigation = new Class({
     initialize: function(name){
         this.name = name;
         this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
-       
+        this.container;
     },
  	getCSSStyle: function () {
 		 cssStyle =	"ul\n" +
@@ -46,7 +46,7 @@ Com = new Class({
 		},
 	
 	start: function(myContainer) {
-
+		this.container = myContainer;
 		var config = {
 			"navigation" : {
 				"customcss" : "no",
@@ -151,9 +151,20 @@ Com = new Class({
 		docs = new Array();
 		documents.forEach(function(dataItem){
 			docs = docs.append([scope.getDataItem(dataItem)]);
-			
-		
 		});
 		this.start(myContainer);
+	},
+	
+	test : function(){
+		alert("Successful Loaded " + this.container.id);
+	}
+});
+
+Com = new Class({
+	initialize : function(){
+		
+	},
+	createInstance : function(){
+		return new Navigation();
 	},
 });

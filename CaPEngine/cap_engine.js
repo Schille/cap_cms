@@ -135,11 +135,11 @@ var ComponentManager = new Class({
     
     initializeComponent : function(myComponentName, myContainer){
     	if(LoadedComponents.has(myComponentName)){
-    		alert("CACHED COMPONENT");
+    		alert("CACHED COMPONENT " + myComponentName);
     		return LoadedComponents.get(myComponentName).createInstance(myContainer);
     	}
     	else{
-    		alert("LOAD COMPONENT");
+    		alert("LOAD COMPONENT " + myComponentName);
     		return this.fetchComponent(myComponentName).createInstance(myContainer);
     	}
     }

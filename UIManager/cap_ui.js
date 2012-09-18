@@ -7,23 +7,22 @@ function getUIVersion(){
 
 ComponentIDs = new Hash();
 ComponentAffiliation = new Hash();
-
-ComponentResolve = new Hash();
+ComponentResolver = new Hash();
 
 
 function buildInitialLayout(){
 	var config = getInitialConfigFile();
-	registerComponentIDs(config.declaration);
-//	affiliateComponents(config.affiliation);
+	registerComponentIDs(config.register);
+	
+	affiliateComponents(config.affiliation);
 	
 	buildContainer(config.layout,$("ground"));
 	
-	alert(ComponentAffiliation.getKeys());
 	
-	var nav1 = ComponentAffiliation.get("nav1");
+	var nav1 = ComponentResolver.get("nav1");
 	nav1.getInstance().test();
 	
-	var nav2 = ComponentAffiliation.get("nav2");
+	var nav2 = ComponentResolver.get("nav2");
 	nav2.getInstance().test();
 	
 };
@@ -32,7 +31,7 @@ function buildInitialLayout(){
 
 function registerComponentIDs(config){
 	for(var key in config){
-		if(config[key] == Array){
+		if(config[key] instanceof Array){
 			config[key].each(function(name){
 				ComponentIDs.set(name,key);
 			});
@@ -63,7 +62,7 @@ function buildContainer(myPlacement, myContainer){
 			id : myContainer.id + ".header",
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.header), div);
-		ComponentAffiliation.set(myPlacement.header, comp);
+		ComponentResolver.set(myPlacement.header, comp);
 		comp.build();
 		$(myContainer).adopt(div);
 		}
@@ -80,7 +79,7 @@ function buildContainer(myPlacement, myContainer){
 			id : myContainer.id + ".footer",
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.footer), div);
-		ComponentAffiliation.set(myPlacement.footer, comp);
+		ComponentResolver.set(myPlacement.footer, comp);
 		comp.build();
 		$(myContainer).adopt(div);
 		}
@@ -97,7 +96,7 @@ function buildContainer(myPlacement, myContainer){
 			id : myContainer.id + ".left",
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.left), div);
-		ComponentAffiliation.set(myPlacement.left, comp);
+		ComponentResolver.set(myPlacement.left, comp);
 		comp.build();
 		$(myContainer).adopt(div);
 		}
@@ -114,7 +113,7 @@ function buildContainer(myPlacement, myContainer){
 			id : myContainer.id + ".right",
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.right), div);
-		ComponentAffiliation.set(myPlacement.right, comp);
+		ComponentResolver.set(myPlacement.right, comp);
 		comp.build();
 		$(myContainer).adopt(div);
 		}
@@ -131,7 +130,7 @@ function buildContainer(myPlacement, myContainer){
 			id : myContainer.id + ".center ",
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.center), div);
-		ComponentAffiliation.set(myPlacement.center, comp);
+		ComponentResolver.set(myPlacement.center, comp);
 		comp.build();
 		$(myContainer).adopt(div);
 		}
