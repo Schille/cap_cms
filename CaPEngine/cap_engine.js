@@ -7,7 +7,7 @@ function getEngineVersion(){
 /**
  * Stores all loaded components, they are may not built.
  */
-LoadedComponents = new Array();
+LoadedComponents = new Hash();
 
 
 /**
@@ -125,18 +125,41 @@ var ComponentManager = new Class({
 	initialize: function(myComponentRoot){
 		this.parent(myComponentRoot)
     },
-    initializeComponent : function(myComponentName, myContainer){
+    
+    fetchComponent : function(myComponentName){
     	var script = this.loadScript(myComponentName);
-    	var component = new Component(myComponentName, script, new Com(), myContainer);
-    	LoadedComponents = LoadedComponents.append([component]);
-    	return component;
-    	
+    	var loader = new ComponentLoader(myComponentName, script, new Com());
+    	LoadedComponents.set(myComponentName,loader);
+    	return loader;
+    },
+    
+    initializeComponent : function(myComponentName, myContainer){
+    	if(LoadedComponents.has(myComponentName)){
+    		alert("CACHED COMPONENT");
+    		return LoadedComponents.get(myComponentName).createInstance(myContainer);
+    	}
+    	else{
+    		alert("LOAD COMPONENT");
+    		return this.fetchComponent(myComponentName).createInstance(myContainer);
+    	}
     }
+    
+});
+
+var ComponentLoader = new Class({
+	initialize : function(myScriptName, myScrip, myClassloader){
+        this.scriptName = myScriptName;
+        this.script = myScrip;
+        this.instance = myClassloader;
+	},
+	createInstance : function(myContainer){
+		return new Component(this.scriptName,this.script, this.instance.createInstance(), myContainer) ;
+	}
 });
 
 var Component = new Class({
     initialize: function(myScriptName, myScrip, myInstance, myContainer){
-        this.ScriptName = myScriptName;
+        this.scriptName = myScriptName;
         this.script = myScrip;
         this.instance = myInstance;
         this.assigendContainer = myContainer;

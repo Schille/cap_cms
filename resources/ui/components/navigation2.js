@@ -1,9 +1,10 @@
-Com = new Class({
+var Navigation1 = new Class({
     initialize: function(){
     	this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
+    	this.container;
     },
-
     build : function(myContainer){
+    	this.container = myContainer;
 		var documents = this.dataItemLoader.getAllDataItems();
 		var scope = this.dataItemLoader;
 		docs = new Array();
@@ -115,5 +116,18 @@ Com = new Class({
 			});
 			$(document.head).adopt(naviBarCSS);
 		},
+		
+		test : function(){
+			alert("Successful Loaded " + this.container.id);
+		}
     
+});
+
+Com = new Class({
+	initialize : function(){
+		
+	},
+	createInstance : function(){
+		return new Navigation1();
+	},
 });
