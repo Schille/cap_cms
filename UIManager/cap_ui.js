@@ -129,7 +129,9 @@ var UIManager = new Class({
 					id : myContainer.id + ".center",
 				});
 				$(myContainer).adopt(div);
-				this.buildContainer(myPlacement.center, div);
+				var comp = componentManager.initializeComponent(ComponentIDs
+						.get(myPlacement.center), div);
+				ComponentResolver.set(myPlacement.center, comp);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + ".center ",

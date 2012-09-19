@@ -136,9 +136,6 @@ var Navigation = new Class({
 				navBarItemBullet.adopt(navBarItemLink);
 				
 			}
-			
-			
-			
 		}
 		$(this.container).adopt(navBarItemList);
 
@@ -155,7 +152,6 @@ var Navigation = new Class({
 		});
 		this.start(myID,myContainer);
 	},
-	
 	performAction : function(){
 		alert("Successful Loaded " + this.id);
 	}
