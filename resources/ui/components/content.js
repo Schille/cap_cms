@@ -11,6 +11,7 @@ function firstWords(words) {
 			}
 		}
 	}
+	return words;
 }
 //Article class to create different Article-Objects
 Article = new Class(
@@ -28,6 +29,7 @@ Article = new Class(
 			//short and the long version of the given article. 
 			//Return the article-object.
 			createArticle : function() {
+				
 				var k = (this.text);
 				var readMore = new Element("a", {
 					html : " Read More",
@@ -40,7 +42,6 @@ Article = new Class(
 					id : "less"
 
 				});
-
 				var article = new Element(
 						"div",
 						{
@@ -81,7 +82,7 @@ Article = new Class(
 			},
 		});
 
-Com = new Class(
+ContentViewer = new Class(
 		{
 			//Class constructor ... add more description here
 			initialize : function(name) {
@@ -93,11 +94,12 @@ Com = new Class(
 			
 			//returns CSS which fits to the content
 			getCSSStyle : function() {
-				var Style = "div.divcont \n " + "{\n"
-						+ "border-top-right-radius: 16px;\n"
+				var Style =  "div \n " + "{\n"
+						+ "border-top-right-radius: 16px;\n" 
 						+ "border-bottom-right-radius: 16px;\n"
-						+ "background-color:#98bf21;\n" + "}\n"
-						+ "div.divcont\n" + "{\n" + "overflow: auto;\n" + "}\n";
+						+ //"background-color:#98bf21;\n" +
+								"}\n"
+						+ "div \n" + "{\n" + "overflow: auto;\n" + "}\n";
 				return Style;
 			},
 
@@ -133,11 +135,12 @@ Com = new Class(
 //								id : "article" + i
 //							});
 //
-//				}
+//			  }give it a go...
 //			},
 			
 			//makes it possible to build the component. 
-			build : function(myContainer) {
+			build : function(myID, myContainer) {
+				this.id = myID;
 				var documents = this.dataItemLoader.getAllDataItems();
 				var scope = this.dataItemLoader;
 				docs = new Array();
@@ -148,5 +151,17 @@ Com = new Class(
 
 				this.load(myContainer);
 			},
+			test : function() {
+				alert("Successful Loaded: " + this.id);
+			}
 
 		});
+
+Com = new Class({
+	initialize : function(){
+		
+	},
+	createInstance : function(){
+		return new ContentViewer();
+	},
+});
