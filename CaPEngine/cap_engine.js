@@ -135,11 +135,9 @@ var ComponentManager = new Class({
     
     initializeComponent : function(myComponentName, myContainer){
     	if(LoadedComponents.has(myComponentName)){
-    		alert("CACHED COMPONENT " + myComponentName);
     		return LoadedComponents.get(myComponentName).createInstance(myContainer);
     	}
     	else{
-    		alert("LOAD COMPONENT " + myComponentName);
     		return this.fetchComponent(myComponentName).createInstance(myContainer);
     	}
     }
@@ -164,8 +162,8 @@ var Component = new Class({
         this.instance = myInstance;
         this.assigendContainer = myContainer;
     },
-    build : function(){
-    	this.instance.build(this.assigendContainer);
+    build : function(myID){
+    	this.instance.build(myID,this.assigendContainer);
     },
     getInstance : function(){
     	return this.instance;

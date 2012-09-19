@@ -3,8 +3,9 @@ var Navigation1 = new Class({
     	this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
     	this.container;
     },
-    build : function(myContainer){
+    build : function(myID, myContainer){
     	this.container = myContainer;
+    	this.id = myID;
 		var documents = this.dataItemLoader.getAllDataItems();
 		var scope = this.dataItemLoader;
 		docs = new Array();
@@ -25,7 +26,7 @@ var Navigation1 = new Class({
 			navBarItemList.adopt(navBarItemBullet);
 		}
 		
-		$(myContainer).adopt(navBarItemList);
+		$(this.container).adopt(navBarItemList);
 		this.setListProperties(navBarItemList);
 		this.adaptNavibar();
     },
@@ -118,7 +119,7 @@ var Navigation1 = new Class({
 		},
 		
 		test : function(){
-			alert("Successful Loaded " + this.container.id);
+			alert("Successful Loaded: " + this.id);
 		}
     
 });

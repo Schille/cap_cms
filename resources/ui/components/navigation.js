@@ -45,7 +45,8 @@ var Navigation = new Class({
 			$(document.head).adopt(naviBarCSS);
 		},
 	
-	start: function(myContainer) {
+	start: function(myID, myContainer) {
+		this.id = myID;
 		this.container = myContainer;
 		var config = {
 			"navigation" : {
@@ -139,24 +140,24 @@ var Navigation = new Class({
 			
 			
 		}
-		$(myContainer).adopt(navBarItemList);
+		$(this.container).adopt(navBarItemList);
 
 		myContainer.adopt(navBarItemList);
 
 		this.adaptNavibar();
 	},
-	build : function(myContainer){
+	build : function(myID ,myContainer){
 		var documents = this.dataItemLoader.getAllDataItems();
 		var scope = this.dataItemLoader;
 		docs = new Array();
 		documents.forEach(function(dataItem){
 			docs = docs.append([scope.getDataItem(dataItem)]);
 		});
-		this.start(myContainer);
+		this.start(myID,myContainer);
 	},
 	
 	test : function(){
-		alert("Successful Loaded " + this.container.id);
+		alert("Successful Loaded " + this.id);
 	}
 });
 

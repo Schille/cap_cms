@@ -18,16 +18,10 @@ function buildInitialLayout(){
 	
 	buildContainer(config.layout,$("ground"));
 	
-	
-	var nav1 = ComponentResolver.get("nav1");
-	nav1.getInstance().test();
-	
-	var nav2 = ComponentResolver.get("nav2");
-	nav2.getInstance().test();
-	
+	ComponentResolver.forEach(function(comp,name){
+		comp.build(name);
+	});
 };
-
-
 
 function registerComponentIDs(config){
 	for(var key in config){
@@ -41,6 +35,22 @@ function registerComponentIDs(config){
 		}
 	}
 };
+
+function triggerAffiliatedComponents(sender){
+	if(sender instanceof EventInformation){
+		var slave = ComponentAffiliation.get(sender.sender);
+		if(slave != undefined){
+			if(slave instanceof Array){
+				slave.each(function(comp){
+					ComponentResolver.get(comp).getInstance().test();
+				});
+			}
+			else{
+				ComponentResolver.get(slave).getInstance().test();
+			}
+		}
+	}
+}
 
 function affiliateComponents(config){
 	for(var key in config){
@@ -63,7 +73,6 @@ function buildContainer(myPlacement, myContainer){
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.header), div);
 		ComponentResolver.set(myPlacement.header, comp);
-		comp.build();
 		$(myContainer).adopt(div);
 		}
 	}
@@ -80,7 +89,6 @@ function buildContainer(myPlacement, myContainer){
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.footer), div);
 		ComponentResolver.set(myPlacement.footer, comp);
-		comp.build();
 		$(myContainer).adopt(div);
 		}
 	}
@@ -97,7 +105,6 @@ function buildContainer(myPlacement, myContainer){
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.left), div);
 		ComponentResolver.set(myPlacement.left, comp);
-		comp.build();
 		$(myContainer).adopt(div);
 		}
 	}
@@ -114,7 +121,6 @@ function buildContainer(myPlacement, myContainer){
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.right), div);
 		ComponentResolver.set(myPlacement.right, comp);
-		comp.build();
 		$(myContainer).adopt(div);
 		}
 	}
@@ -131,14 +137,14 @@ function buildContainer(myPlacement, myContainer){
 		});
 		var comp = componentManager.initializeComponent(ComponentIDs.get(myPlacement.center), div);
 		ComponentResolver.set(myPlacement.center, comp);
-		comp.build();
 		$(myContainer).adopt(div);
 		}
 	}
 };
 
 var EventInformation = new Class({
-    initialize: function(myActionName, myActionType){
+    initialize: function(mySender, myActionName, myActionType){
+    	this.sender = mySender;
         this.actionName = myActionName;
         this.actionType = myActionType;
     },
