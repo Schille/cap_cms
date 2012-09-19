@@ -23,7 +23,6 @@ var UIManager = new Class({
 			comp.build(name);
 		});
 	},
-
 	registerComponentIDs : function(config) {
 		for ( var key in config) {
 			if (config[key] instanceof Array) {
@@ -41,21 +40,19 @@ var UIManager = new Class({
 			if (slave != undefined) {
 				if (slave instanceof Array) {
 					slave.each(function(comp) {
-						ComponentResolver.get(comp).getInstance().test();
+						ComponentResolver.get(comp).getInstance().performAction();
 					});
 				} else {
-					ComponentResolver.get(slave).getInstance().test();
+					ComponentResolver.get(slave).getInstance().performAction();
 				}
 			}
 		}
 	},
-
 	affiliateComponents : function(config) {
 		for ( var key in config) {
 			ComponentAffiliation.set(key, config[key]);
 		}
 	},
-
 	buildContainer : function(myPlacement, myContainer) {
 		if (myPlacement.header != undefined) {
 			if (myPlacement.header == "[object Object]") {
@@ -63,7 +60,7 @@ var UIManager = new Class({
 					id : myContainer.id + ".header",
 				});
 				$(myContainer).adopt(div);
-				buildContainer(myPlacement.header, div);
+				this.buildContainer(myPlacement.header, div);
 			} else {
 
 				var div = new Element("div", {
@@ -81,7 +78,7 @@ var UIManager = new Class({
 					id : myContainer.id + ".footer",
 				});
 				$(myContainer).adopt(div);
-				buildContainer(myPlacement.footer, div);
+				this.buildContainer(myPlacement.footer, div);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + ".footer",
@@ -98,7 +95,7 @@ var UIManager = new Class({
 					id : myContainer.id + ".left",
 				});
 				$(myContainer).adopt(div);
-				buildContainer(myPlacement.left, div);
+				this.buildContainer(myPlacement.left, div);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + ".left",
@@ -115,7 +112,7 @@ var UIManager = new Class({
 					id : myContainer.id + ".right",
 				});
 				$(myContainer).adopt(div);
-				buildContainer(myPlacement.right, div);
+				this.buildContainer(myPlacement.right, div);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + ".right",
@@ -132,7 +129,7 @@ var UIManager = new Class({
 					id : myContainer.id + ".center",
 				});
 				$(myContainer).adopt(div);
-				buildContainer(myPlacement.center, div);
+				this.buildContainer(myPlacement.center, div);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + ".center ",
@@ -145,7 +142,6 @@ var UIManager = new Class({
 		}
 
 	}
-
 });
 
 var EventInformation = new Class({

@@ -118,7 +118,7 @@ var Navigation1 = new Class({
 			$(document.head).adopt(naviBarCSS);
 		},
 		
-		test : function(){
+		performAction : function(){
 			alert("Successful Loaded: " + this.id);
 		}
     

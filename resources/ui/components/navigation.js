@@ -156,7 +156,7 @@ var Navigation = new Class({
 		this.start(myID,myContainer);
 	},
 	
-	test : function(){
+	performAction : function(){
 		alert("Successful Loaded " + this.id);
 	}
 });

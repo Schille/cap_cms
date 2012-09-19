@@ -151,7 +151,7 @@ ContentViewer = new Class(
 
 				this.load(myContainer);
 			},
-			test : function() {
+			performAction : function() {
 				alert("Successful Loaded: " + this.id);
 			}
 
