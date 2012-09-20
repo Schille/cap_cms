@@ -97,7 +97,7 @@ var Navigation = new Class({
 				navBarItemList.adopt(navBarItemBullet);
 				
 				var navBarItemLink = new Element ("a", {
-					href: module[i].link,
+					href: "#",
 					name: module[i].name,
 					class: "navi_item",
 					html: module[i].label,
@@ -105,8 +105,9 @@ var Navigation = new Class({
 						float: float,
 					},
 				});
+				var scope = this;
 				navBarItemLink.addEvent("click",function(){
-					alert($(this).name);
+					UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).id, "changeContent"));
 				});
 				navBarItemBullet.adopt(navBarItemLink);
 
@@ -130,8 +131,9 @@ var Navigation = new Class({
 						float: float,
 					},
 				});
+				var scope = this;
 				navBarItemLink.addEvent("click",function(){
-					alert($(this).name);
+					UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).id, "changeContent"));
 				});
 				navBarItemBullet.adopt(navBarItemLink);
 				

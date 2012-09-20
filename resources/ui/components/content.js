@@ -119,8 +119,15 @@ ContentViewer = new Class(
 						.createArticle();
 				var x2 = new Article(docs[1].headline, docs[1].text)
 						.createArticle();
+				var x3 = new Article(docs[2].headline, docs[2].text)
+				.createArticle();
+				var x4 = new Article(docs[3].headline, docs[3].text)
+				.createArticle();
 				myContainer.adopt(x1);
 				myContainer.adopt(x2);
+				myContainer.adopt(x3);
+				myContainer.adopt(x4);
+
 			},
 
 			
@@ -151,8 +158,8 @@ ContentViewer = new Class(
 
 				this.load(myContainer);
 			},
-			performAction : function() {
-				alert("Successful Loaded: " + this.id);
+			performAction : function(myEventInformation) {
+				alert("Received: " + myEventInformation.actionType + " from: " + myEventInformation.sender);
 			}
 
 		});

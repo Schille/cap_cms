@@ -14,18 +14,17 @@ var Navigation1 = new Class({
 		});
 		navBarItemList = new Element ("ul",{id : "navList"});
 
-		
+		var scope = this;
 		for ( var i = 0; i <= docs.length - 1; i++) {
 			var navBarItemBullet = new Element ("li", {
 				id: docs[i].name,
 				html : docs[i].label,
 			});
 			navBarItemBullet.addEvent("click",function(){
-				alert($(this).id);
+				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).id, "changeContent"));
 			});
 			navBarItemList.adopt(navBarItemBullet);
 		}
-		
 		$(this.container).adopt(navBarItemList);
 		this.setListProperties(navBarItemList);
 		this.adaptNavibar();

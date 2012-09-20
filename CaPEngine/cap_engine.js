@@ -163,7 +163,7 @@ var Component = new Class({
         this.assigendContainer = myContainer;
     },
     build : function(myID){
-    	this.instance.build(myID,this.assigendContainer);
+    	this.instance.build(myID, this.assigendContainer);
     },
     getInstance : function(){
     	return this.instance;
