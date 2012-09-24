@@ -52,13 +52,19 @@ Article = new Class(
 						});
 
 				//Collapse Event
+				
 				readLess.addEvent('click', function() {
+					
 					(article).morph({
 						width : 475,
 						height : 200
 					});
+					
 					(article).set('html', firstWords(k) + '<br>');
 					(article).adopt(readMore);
+					UIManager.sizeChanged(this.getParent());
+					
+					
 				});
 				
 				//Expansion Event
@@ -67,10 +73,12 @@ Article = new Class(
 						width : 475,
 						height : 400
 					});
+					
+					UIManager.sizeChanged(this.getParent());
 					(article).set('html', k + '<br>');
 					(article).adopt(readLess);
-
-				});
+					
+					});
 				//Expansion Object Event needs to be attached to the actual article.
 				//<------------- Maybe include some condition is article is long enough to
 				// be expanded or maybe some calculation according the number of signs and size
@@ -94,8 +102,9 @@ ContentViewer = new Class(
 			
 			//returns CSS which fits to the content
 			getCSSStyle : function() {
-				var Style =  "div \n " + "{\n"
-						+ "border-top-right-radius: 16px;\n" 
+				var Style =  "div \n " + "{\n" 
+
+						+ "border-top-right-radius: 16px;\n"
 						+ "border-bottom-right-radius: 16px;\n"
 						+ //"background-color:#98bf21;\n" +
 								"}\n"
@@ -125,8 +134,7 @@ ContentViewer = new Class(
 				.createArticle();
 				myContainer.adopt(x1);
 				myContainer.adopt(x2);
-				myContainer.adopt(x3);
-				myContainer.adopt(x4);
+
 
 			},
 
