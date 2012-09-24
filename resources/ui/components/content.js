@@ -102,13 +102,7 @@ ContentViewer = new Class(
 			
 			//returns CSS which fits to the content
 			getCSSStyle : function() {
-				var Style =  "div \n " + "{\n" 
-
-						+ "border-top-right-radius: 16px;\n"
-						+ "border-bottom-right-radius: 16px;\n"
-						+ //"background-color:#98bf21;\n" +
-								"}\n"
-						+ "div \n" + "{\n" + "overflow: auto;\n" + "}\n";
+				var Style = "";
 				return Style;
 			},
 
