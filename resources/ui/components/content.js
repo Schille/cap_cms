@@ -45,7 +45,7 @@ Article = new Class(
 				var article = new Element(
 						"div",
 						{
-							style : "position:relative;  width:475px; height:200px; top:5px; left: 7px;  background-color:#C2E94a; overflow:auto; ",
+							style : "position:relative;  height:200px; background-color:#C2E94a; overflow:auto; ",
 							html : firstWords(k),
 							id : "article_num"
 
@@ -56,13 +56,13 @@ Article = new Class(
 				readLess.addEvent('click', function() {
 					
 					(article).morph({
-						width : 475,
+
 						height : 200
 					});
 					
 					(article).set('html', firstWords(k) + '<br>');
 					(article).adopt(readMore);
-					UIManager.sizeChanged(this.getParent());
+					//UIManager.sizeChanged(this.getParent());
 					
 					
 				});
@@ -70,11 +70,11 @@ Article = new Class(
 				//Expansion Event
 				readMore.addEvent('click', function() {
 					(article).morph({
-						width : 475,
+
 						height : 400
 					});
 					
-					UIManager.sizeChanged(this.getParent());
+					//UIManager.sizeChanged(this.getParent());
 					(article).set('html', k + '<br>');
 					(article).adopt(readLess);
 					

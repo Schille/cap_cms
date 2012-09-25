@@ -78,7 +78,7 @@ var Navigation1 = new Class({
 	getCSSStyle: function () {
 		 cssStyle =	"#navList\n" + 
 		 				"{\n"+
-		 				"margin: 0 50px 0 0;\n"+
+		 				"margin: 0 0 0 0;\n"+
 		 				"width: 130px;\n"+
 		 				"padding: 0;\n"+
 		 				"float: left;\n"+	
@@ -88,7 +88,7 @@ var Navigation1 = new Class({
 			 			"display: block;\n" +
 			 			"margin: 0;\n"+
 			 			"padding: 4px;\n"+
-			 			"width: 120px;\n"+
+			 			//"width: 120px;\n"+
 			 			"background-color: #333;\n"+
 			 			"color: #888;\n"+
 			 			"}\n"+

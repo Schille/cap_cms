@@ -26,13 +26,10 @@ var UIManager = new Class({
 		ComponentResolver.forEach(function(comp, name) {
 			comp.build(name);
 		});
-
-		alert(Wrappers.length);
 		var scope = this;
 		CSSResolver.forEach(function(div, container) {
 
 			if (container == "footer") {
-
 				var value = $(div).getHeight();
 				scope.getFooterCSS(div, value);
 
@@ -40,23 +37,9 @@ var UIManager = new Class({
 				scope.createCSSLayout(container, div);
 			}
 		});
-		
-		//this.synchronizeWrapper();
 
-	},
-	synchronizeWrapper : function(){
-		Wrappers.each(function(wrapper){
-			var children = wrapper.getChildren();
-			var temp = 0;
-			children.each(function(child){
-				if(temp < child.getHeight()){
-					temp = child.getHeight();
-				}
-			});
-			children.each(function(child){
-				child.setStyle('height', temp);
-			});
-		});
+		// this.synchronizeWrapper();
+
 	},
 	registerComponentIDs : function(config) {
 		for ( var key in config) {
@@ -116,12 +99,13 @@ var UIManager = new Class({
 			class : "clearfix",
 		});
 
+		// HEADER Layout
 		if (myPlacement.header != undefined) {
 			if (myPlacement.header == "[object Object]") {
 				var div = new Element("div", {
 					id : myContainer.id + "-header",
 				});
-				myContainer.adopt(div);
+				wrapper.adopt(div);
 				CSSResolver.set("header", div.id);
 				this.buildContainer(myPlacement.header, div);
 			} else {
@@ -133,66 +117,120 @@ var UIManager = new Class({
 				ComponentResolver.set(myPlacement.header, comp);
 				ComponentPlacement.set(myPlacement.header, div);
 				CSSResolver.set("header", div.id);
-				myContainer.adopt(div);
+				wrapper.adopt(div);
 			}
 		}
+		// HEADER Layout END
+
+
+		
+		// LEFT Layout
+		if (myPlacement.left != undefined) {
+			if (myPlacement.left == "[object Object]") {
+				var div = new Element("div", {
+					id : myContainer.id + "-left",
+					style : "float: left; height: inherit;"
+				});
+				wrapper.adopt(div);
+				CSSResolver.set("left", div.id);
+				this.buildContainer(myPlacement.left, div);
+			} else {
+				if (myPlacement.left.contains('#')) {
+					var myvalue = myPlacement.left.substr(1,
+							myPlacement.left.length - 1);
+					var div = new Element("div", {
+						id : myContainer.id + "-left-placeholder",
+						style : "width : " + myvalue + ";height: inherit; float: left;",
+						html : "&nbsp;",
+					});
+					wrapper.adopt(div);
+				} else {
+					var div = new Element("div", {
+						id : myContainer.id + "-left",
+						style : "height: inherit; float: left;",
+					});
+					var comp = componentManager.initializeComponent(
+							ComponentIDs.get(myPlacement.left), div);
+					ComponentResolver.set(myPlacement.left, comp);
+					ComponentPlacement.set(myPlacement.left, div);
+					CSSResolver.set("left", div.id);
+					wrapper.adopt(div);
+				}
+			}
+		}
+		// LEFT Layout END
+
+
+		// RIGHT Layout
+		if (myPlacement.right != undefined) {
+			if (myPlacement.right == "[object Object]") {
+				var div = new Element("div", {
+					id : myContainer.id + "-right",
+					style : "float: right; height: inherit;",
+				});
+				wrapper.adopt(div);
+				CSSResolver.set("right", div.id);
+				this.buildContainer(myPlacement.right, div);
+			} else {
+				if (myPlacement.right.contains('#')) {
+					var myvalue = myPlacement.right.substr(1,
+							myPlacement.right.length - 1);
+					var div = new Element("div", {
+						id : myContainer.id + "-right-placeholder",
+						style : "width : " + myvalue + ";height: inherit; float: right;",
+						html : "&nbsp;",
+					});
+					wrapper.adopt(div);
+				} else {
+					var div = new Element("div", {
+						id : myContainer.id + "-right",
+						style : "height: inherit; float: right; ",
+					});
+					var comp = componentManager.initializeComponent(
+							ComponentIDs.get(myPlacement.right), div);
+					ComponentResolver.set(myPlacement.right, comp);
+					ComponentPlacement.set(myPlacement.right, div);
+					CSSResolver.set("right", div.id);
+					wrapper.adopt(div);
+				}
+			}
+		}
+		// RIGHT Layout END
+		
+		// CENTER Layout
 		if (myPlacement.center != undefined) {
-			var coll = new Element("div", {
-				id : "coll",
-			});
 			if (myPlacement.center == "[object Object]") {
 				var div = new Element("div", {
 					id : myContainer.id + "-center",
+					style : "overflow : auto;"
 				});
-				coll.adopt(div);
+				wrapper.adopt(div);
 				CSSResolver.set("center", div.id);
 				this.buildContainer(myPlacement.center, div);
 			} else {
 				var div = new Element("div", {
 					id : myContainer.id + "-center",
+					style : "overflow : auto;"
 				});
 				var comp = componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.center), div);
 				ComponentResolver.set(myPlacement.center, comp);
 				ComponentPlacement.set(myPlacement.center, div);
 				CSSResolver.set("center", div.id);
-				coll.adopt(div);
-			}
-		} else {
-			var placehoder = new Element("div", {
-				id : "placeholder",
-			});
-
-			wrapper.adopt(placehoder);
-
-		}
-		if (myPlacement.right != undefined) {
-			if(coll == undefined){
-				var coll = new Element("div", {
-					id : "coll",
-				});
-			}
-			if (myPlacement.right == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-right",
-				});
-				coll.adopt(div);
-				CSSResolver.set("right", div.id);
-				this.buildContainer(myPlacement.right, div);
-			} else {
-				var div = new Element("div", {
-					id : myContainer.id + "-right",
-				});
-				var comp = componentManager.initializeComponent(ComponentIDs
-						.get(myPlacement.right), div);
-				ComponentResolver.set(myPlacement.right, comp);
-				ComponentPlacement.set(myPlacement.right, div);
-				CSSResolver.set("right", div.id);
-				coll.adopt(div);
+				wrapper.adopt(div);
 			}
 		}
-		wrapper.adopt(coll);
+		// CENTER Layout END
+
+		// Wrapper END
+		var clr = new Element("div", {
+			id : "clr",
+			style : "clear:both;"
+		});
+		wrapper.adopt(clr);
 		$(myContainer).adopt(wrapper);
+
+		// FOOTER Layout
 		if (myPlacement.footer != undefined) {
 			if (myPlacement.footer == "[object Object]") {
 				var div = new Element("div", {
@@ -214,26 +252,9 @@ var UIManager = new Class({
 				$(myContainer).adopt(div);
 			}
 		}
-		if (myPlacement.left != undefined) {
-			if (myPlacement.left == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-left",
-				});
-				wrapper.adopt(div);
-				CSSResolver.set("left", div.id);
-				this.buildContainer(myPlacement.left, div);
-			} else {
-				var div = new Element("div", {
-					id : myContainer.id + "-left",
-				});
-				var comp = componentManager.initializeComponent(ComponentIDs
-						.get(myPlacement.left), div);
-				ComponentResolver.set(myPlacement.left, comp);
-				ComponentPlacement.set(myPlacement.left, div);
-				CSSResolver.set("left", div.id);
-				wrapper.adopt(div);
-			}
-		}
+		// FOOTER Layout END
+
+		// add wrapper to the collection of wrappers
 		Wrappers.push(wrapper);
 	},
 
@@ -267,13 +288,10 @@ var UIManager = new Class({
 			 * Header
 			 * -----------------------------------------------------------------------------
 			 */
-			return "div#" + myContainer + "{" +
-			"width:100%;"+
-			"overflow:auto;"+
-			"display:block;"+
-			"position : relative;"+
-			"background-color:#D9B6B6;" +
-			"}";
+			return "div#" + myContainer + "{" + "width:100%;"
+					+ "overflow:auto;" + "display:block;"
+					+ "position : relative;" + "background-color:#D9B6B6;"
+					+ "}";
 		}
 
 		if (myAlign == "center") {
@@ -281,14 +299,12 @@ var UIManager = new Class({
 			 * Center
 			 * -----------------------------------------------------------------------------
 			 */
-			return "div#" + myContainer + "{" +
-			"float: left;" +
-			//"padding: 0 0 100px;" +
+			return "div#" + myContainer + "{" + //	"float: left;" +
+			"overflow : auto;" +
 			// " display: block;"+
-			//"width: 100%;" +
-			//"	height: 1%;" + "" +
-			"position: relative;"+
-			"background: #7FE940;" + "}";
+			//"z-index: -1;" +
+			// " width: 200px;" + "" +
+			"position: relative;" + "background: #7FE940;" + "}";
 		}
 
 		if (myAlign == "left") {
@@ -296,13 +312,11 @@ var UIManager = new Class({
 			 * Sidebar Left
 			 * -----------------------------------------------------------------------------
 			 */
-			return "div#" + myContainer + "{" +
-			"float: left;" +
-			//" width: 25%;"+
-			"position: relative;" +
-			"background: #B5E3FF;" +
+			return "div#" + myContainer + "{" + "float: left;" +
+			 "width: inherint;"+
+			"position: relative;" + "background: #B5E3FF;" +
 			// " left: -250px;"+
-			//"height:" + this.setLeftHeight(myContainer) + "px;" +
+			"height: inherit;" +
 
 			"}";
 		}
@@ -312,13 +326,13 @@ var UIManager = new Class({
 			 * Sidebar Right
 			 * -----------------------------------------------------------------------------
 			 */
-			return "div#" + myContainer + "{" +
-			"	float: right;" +
+			return "div#" + myContainer + "{" + "float: right;" +
 			// " margin-right: -250px;"+
 			// " width: 250px;"+
-			//"	position: relative;"
-			+ "	background: #FFACAA;" +
-			// " height: 100%;"+
+			// " position: relative;"
+			+"	background: #FFACAA;" +
+			// " left: -250px;"+
+			"height: inherit;" +
 			"}";
 		}
 
@@ -327,11 +341,9 @@ var UIManager = new Class({
 			 * Footer
 			 * -----------------------------------------------------------------------------
 			 */
-			return "div#" + myContainer + "{" +
-			"height: 200%;" +
+			return "div#" + myContainer + "{" + "height: 200%;" +
 			// " margin: -200px auto 0;";+
-			"background: #BFF08E;" +
-			"position: relative;" + "}";
+			"background: #BFF08E;" + "position: relative;" + "}";
 		}
 		return "";
 	},
@@ -341,13 +353,10 @@ var UIManager = new Class({
 			type : "text/css",
 			html : "div#" + myContainer + "{" +
 			// " height: 200px;"+
-			"margin: -" + mySubMargin + "px auto 0;"+
-			"background: #BFF08E;" +
-			"clear: both;" +
-			"position: relative;" + "}",
+			"margin: -" + mySubMargin + "px auto 0;" + "background: #BFF08E;"
+					+ "position: relative;" + "}",
 		});
 		$(document.head).adopt(containerCSS);
-
 	}
 });
 
