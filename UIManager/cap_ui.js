@@ -10,37 +10,38 @@ ComponentAffiliation = new Hash();
 ComponentResolver = new Hash();
 CSSResolver = new Hash();
 ComponentPlacement = new Hash();
-Wrappers = new Array();
-var count = 1;
+ToBeRunFuctions = new Array();
+
 
 var UIManager = new Class({
 
 	buildInitialLayout : function() {
+		//fetch the initial config file from the server
 		var config = getInitialConfigFile();
+		
+		//Register the components - config.json/register
 		this.registerComponentIDs(config.register);
-
+		
+		//Affiliate the components - config.json/affiliation
 		this.affiliateComponents(config.affiliation);
-
-		this.buildContainer(config.layout, $("ground"));
-
+		
+		//Build the initial layout container
+		$("ground").adopt(this.buildContainer(config.layout, "ground"));
+		
+		//Set the look - config.json/look
+		this.createLook(config.look, "ground");
+		
+		//invoke the build method of the configured components 
 		ComponentResolver.forEach(function(comp, name) {
 			comp.build(name);
 		});
-		var scope = this;
-		CSSResolver.forEach(function(div, container) {
 
-			if (container == "footer") {
-				var value = $(div).getHeight();
-				scope.getFooterCSS(div, value);
-
-			} else {
-				scope.createCSSLayout(container, div);
-			}
+		ToBeRunFuctions.forEach(function(func){
+			func();
 		});
 
-		// this.synchronizeWrapper();
-
 	},
+	
 	registerComponentIDs : function(config) {
 		for ( var key in config) {
 			if (config[key] instanceof Array) {
@@ -73,189 +74,251 @@ var UIManager = new Class({
 			}
 		}
 	},
+	
 	affiliateComponents : function(config) {
 		for ( var key in config) {
 			ComponentAffiliation.set(key, config[key]);
 		}
 	},
-	sizeChanged : function(myParent) {
-		var siblings = myParent.getParent().getParent().getSiblings();
-		var height = myParent.getParent().getParent().getParent().getHeight();
-
-		for ( var i = 0; i <= siblings.length - 1; i++) {
-			if (height > siblings[i].getHeight()) {
-
-				siblings[i].morph({
-					height : myParent.getParent().getHeight(),
-
-				});
-			}
-
+	
+	createLook : function(myConfig, myContainer){
+		if(myConfig.background){
+			$(myContainer).setStyle("background-color", myConfig.background);
 		}
+		
+		//Add more config attributes here!
 	},
-	buildContainer : function(myPlacement, myContainer) {
-		var wrapper = new Element("div", {
-			id : "wrapper",
-			class : "clearfix",
+	
+	buildContainer : function(myPlacement, myContainerID) {
+		//Check whether myPlacement is undefinded
+		//so no layout can be generated
+		if(!myPlacement){
+			alert("Malformed Layout Configuration");
+		}
+		//
+		var groundPanel = new Element("div", {
+			id : myContainerID + "-groundPanel",
+			style : "height: inherit;"
 		});
-
-		// HEADER Layout
-		if (myPlacement.header != undefined) {
-			if (myPlacement.header == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-header",
-				});
-				wrapper.adopt(div);
-				CSSResolver.set("header", div.id);
-				this.buildContainer(myPlacement.header, div);
-			} else {
-				var div = new Element("div", {
-					id : myContainer.id + "-header",
-				});
-				var comp = componentManager.initializeComponent(ComponentIDs
-						.get(myPlacement.header), div);
-				ComponentResolver.set(myPlacement.header, comp);
-				ComponentPlacement.set(myPlacement.header, div);
-				CSSResolver.set("header", div.id);
-				wrapper.adopt(div);
-			}
+		if(myPlacement.footer){
+			var wrapper = new Element("div", {
+				id : myContainerID + "-wrapper",
+			});
+			var notInWrapper = groundPanel;
+			groundPanel = wrapper;
 		}
-		// HEADER Layout END
-
-
 		
-		// LEFT Layout
-		if (myPlacement.left != undefined) {
-			if (myPlacement.left == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-left",
-					style : "float: left; height: inherit;"
-				});
-				wrapper.adopt(div);
-				CSSResolver.set("left", div.id);
-				this.buildContainer(myPlacement.left, div);
-			} else {
-				if (myPlacement.left.contains('#')) {
-					var myvalue = myPlacement.left.substr(1,
-							myPlacement.left.length - 1);
-					var div = new Element("div", {
-						id : myContainer.id + "-left-placeholder",
-						style : "width : " + myvalue + ";height: inherit; float: left;",
-						html : "&nbsp;",
-					});
-					wrapper.adopt(div);
-				} else {
-					var div = new Element("div", {
-						id : myContainer.id + "-left",
-						style : "height: inherit; float: left;",
-					});
-					var comp = componentManager.initializeComponent(
-							ComponentIDs.get(myPlacement.left), div);
-					ComponentResolver.set(myPlacement.left, comp);
-					ComponentPlacement.set(myPlacement.left, div);
-					CSSResolver.set("left", div.id);
-					wrapper.adopt(div);
-				}
+		//HEADER ----- Header Layout
+		if(myPlacement.header){
+			var containerCSS = this.getContainerCSS(myPlacement.header, "header");
+			//Create new div container 
+			var header = new Element("div", {
+				id : groundPanel.id + "-header",
+			});
+			header.setStyles(containerCSS);
+			//Check whether this is a complex layout definition
+			if(myPlacement.header.header || myPlacement.header.footer || myPlacement.header.center ||
+					myPlacement.header.left || myPlacement.header.right){
+				header.adopt(this.buildContainer(myPlacement.header, header.id));
 			}
-		}
-		// LEFT Layout END
-
-
-		// RIGHT Layout
-		if (myPlacement.right != undefined) {
-			if (myPlacement.right == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-right",
-					style : "float: right; height: inherit;",
-				});
-				wrapper.adopt(div);
-				CSSResolver.set("right", div.id);
-				this.buildContainer(myPlacement.right, div);
-			} else {
-				if (myPlacement.right.contains('#')) {
-					var myvalue = myPlacement.right.substr(1,
-							myPlacement.right.length - 1);
-					var div = new Element("div", {
-						id : myContainer.id + "-right-placeholder",
-						style : "width : " + myvalue + ";height: inherit; float: right;",
-						html : "&nbsp;",
-					});
-					wrapper.adopt(div);
-				} else {
-					var div = new Element("div", {
-						id : myContainer.id + "-right",
-						style : "height: inherit; float: right; ",
-					});
-					var comp = componentManager.initializeComponent(
-							ComponentIDs.get(myPlacement.right), div);
-					ComponentResolver.set(myPlacement.right, comp);
-					ComponentPlacement.set(myPlacement.right, div);
-					CSSResolver.set("right", div.id);
-					wrapper.adopt(div);
-				}
+			//Check whether a component has been configured
+			if(myPlacement.header.component){
+				var comp = componentManager.initializeComponent(ComponentIDs
+						.get(myPlacement.header.component), header);
+				ComponentResolver.set(myPlacement.header.component, comp);
+				ComponentPlacement.set(myPlacement.header.component, header);
+				header.adopt(comp);
 			}
+			groundPanel.adopt(header);
 		}
-		// RIGHT Layout END
+		//HEADER END -----
 		
-		// CENTER Layout
-		if (myPlacement.center != undefined) {
-			if (myPlacement.center == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-center",
-					style : "overflow : auto;"
-				});
-				wrapper.adopt(div);
-				CSSResolver.set("center", div.id);
-				this.buildContainer(myPlacement.center, div);
-			} else {
-				var div = new Element("div", {
-					id : myContainer.id + "-center",
-					style : "overflow : auto;"
-				});
-				var comp = componentManager.initializeComponent(ComponentIDs
-						.get(myPlacement.center), div);
-				ComponentResolver.set(myPlacement.center, comp);
-				ComponentPlacement.set(myPlacement.center, div);
-				CSSResolver.set("center", div.id);
-				wrapper.adopt(div);
+		//LEFT ----- Left Layout
+		if(myPlacement.left){
+			var containerCSS = this.getContainerCSS(myPlacement.left, "left");
+			//Create new div container 
+			var left = new Element("div", {
+				id : groundPanel.id + "-left",
+			});
+			left.setStyles(containerCSS);
+			//Check whether this is a complex layout definition
+			if(myPlacement.left.header || myPlacement.left.footer || myPlacement.left.center ||
+					myPlacement.left.left || myPlacement.left.right){
+				left.adopt(this.buildContainer(myPlacement.left, left.id));
 			}
-		}
-		// CENTER Layout END
-
-		// Wrapper END
-		var clr = new Element("div", {
-			id : "clr",
-			style : "clear:both;"
-		});
-		wrapper.adopt(clr);
-		$(myContainer).adopt(wrapper);
-
-		// FOOTER Layout
-		if (myPlacement.footer != undefined) {
-			if (myPlacement.footer == "[object Object]") {
-				var div = new Element("div", {
-					id : myContainer.id + "-footer",
-				});
-
-				$(myContainer).adopt(div);
-				CSSResolver.set("footer", div.id);
-				this.buildContainer(myPlacement.footer, div);
-			} else {
-				var div = new Element("div", {
-					id : myContainer.id + "-footer",
-				});
+			//Check whether a component has been configured
+			if(myPlacement.left.component){
 				var comp = componentManager.initializeComponent(ComponentIDs
-						.get(myPlacement.footer), div);
-				CSSResolver.set("footer", div.id);
-				ComponentPlacement.set(myPlacement.footer, div);
-				ComponentResolver.set(myPlacement.footer, comp);
-				$(myContainer).adopt(div);
+						.get(myPlacement.left.component), left);
+				ComponentResolver.set(myPlacement.left.component, comp);
+				ComponentPlacement.set(myPlacement.left.component, left);
+				left.adopt(comp);
 			}
+			groundPanel.adopt(left);
 		}
-		// FOOTER Layout END
-
-		// add wrapper to the collection of wrappers
-		Wrappers.push(wrapper);
+		//LEFT END -----
+		
+		//RIGHT ----- Right Layout
+		if(myPlacement.right){
+			var containerCSS = this.getContainerCSS(myPlacement.right, "right");
+			//Create new div container 
+			var right = new Element("div", {
+				id : groundPanel.id + "-right",
+			});
+			right.setStyles(containerCSS);
+			//Check whether this is a complex layout definition
+			if(myPlacement.right.header || myPlacement.right.footer || myPlacement.right.center ||
+					myPlacement.right.left || myPlacement.right.right){
+				right.adopt(this.buildContainer(myPlacement.right, right.id));
+			}
+			//Check whether a component has been configured
+			if(myPlacement.right.component){
+				var comp = componentManager.initializeComponent(ComponentIDs
+						.get(myPlacement.right.component), right);
+				ComponentResolver.set(myPlacement.right.component, comp);
+				ComponentPlacement.set(myPlacement.right.component, right);
+				right.adopt(comp);
+			}
+			groundPanel.adopt(right);
+		}
+		//RIGHT END -----
+		
+		//CENTER ----- Center Layout
+		if(myPlacement.center){
+			var containerCSS = this.getContainerCSS(myPlacement.center, "center");
+			//Create new div container 
+			var center = new Element("div", {
+				id : groundPanel.id + "-center",
+			});
+			center.setStyles(containerCSS);
+			//Check whether this is a complex layout definition
+			if(myPlacement.center.header || myPlacement.center.footer || myPlacement.center.center ||
+					myPlacement.center.left || myPlacement.center.right){
+				center.adopt(this.buildContainer(myPlacement.center, center.id));
+			}
+			//Check whether a component has been configured
+			if(myPlacement.center.component){
+				var comp = componentManager.initializeComponent(ComponentIDs
+						.get(myPlacement.center.component), center);
+				ComponentResolver.set(myPlacement.center.component, comp);
+				ComponentPlacement.set(myPlacement.center.component, center);
+				center.adopt(comp);
+			}
+			groundPanel.adopt(center);
+		}
+		//CENTER END ----
+		
+		//Add float cleaner
+		groundPanel.adopt(new Element("div", {
+			style : "clear: both;",
+		}));
+		
+		//FOOTER ----- Center Layout
+		if(myPlacement.footer){
+			notInWrapper.adopt(groundPanel); // appand all other container 
+			//Create new div container 
+			var footer = new Element("div", {
+				id : notInWrapper.id + "-footer",
+			});
+			//Check whether this is a complex layout definition
+			if(myPlacement.footer.header || myPlacement.footer.footer || myPlacement.footer.center ||
+					myPlacement.footer.left || myPlacement.footer.right){
+				footer.adopt(this.buildContainer(myPlacement.footer, footer.id));
+			}
+			//Check whether a component has been configured
+			if(myPlacement.footer.component){
+				var comp = componentManager.initializeComponent(ComponentIDs
+						.get(myPlacement.footer.component), footer);
+				ComponentResolver.set(myPlacement.footer.component, comp);
+				ComponentPlacement.set(myPlacement.footer.component, footer);
+				footer.adopt(comp);
+			}
+			var containerCSS = this.getContainerCSS(myPlacement.footer, "footer", groundPanel, footer.id, center.id);
+			notInWrapper.adopt(footer);
+			footer.setStyles(containerCSS);
+			return notInWrapper; //If a footer has been configured - return the wrapper
+		}
+		//FOOTER END ----
+		return groundPanel;
+	},
+	
+	//Function to get CSS String for the given container !Add style attributes of config file here! 
+	getContainerCSS : function(myConfig, myContainerType, myWrapper, myfooterID, mycenterID){
+		var resultingCSS = new Object();
+		if(myConfig.width){ //Check _width_ has been set
+			resultingCSS.width = myConfig.width;
+		}
+		if(myConfig.position){ //Check _position_ has been set
+			if(myConfig.position instanceof Array){
+				toBeTested = myConfig.position;
+			}
+			else{
+				toBeTested = [myConfig.position];
+			}	
+			
+			toBeTested.forEach(function(value){
+				switch (value) {
+				case "centered":
+					resultingCSS.margin = "0px auto";
+					break;
+				case "left": 
+					resultingCSS.margin = "auto 0px";
+					break;
+				case "right":
+					resultingCSS.margin = "auto 0px auto auto";
+					break;
+				case "sticky":
+					if(myContainerType == "footer"){
+						ToBeRunFuctions.push(function(){ 
+							var negMar = $(myfooterID).getHeight();	
+							$(myWrapper).setStyles({
+							height : 'auto !important',
+							"min-height" : '100%',
+							}); 
+							
+							$(mycenterID).setStyles({
+								"padding-bottom": negMar +'px',
+							});
+							
+							$(myfooterID).setStyles({
+							position : "relativ",
+							"margin-top": '-' + negMar +'px',
+							"hight" : negMar + 'px'
+							}); 
+						});
+						
+					}
+					break;
+				default:
+					break;
+				}
+			});
+			
+			
+		}
+		if(myConfig.overflow){
+			resultingCSS.overflow = myConfig.overflow;
+		}
+		else{
+			resultingCSS.overflow = "auto";
+		}
+		//Add more config attributes here!
+		
+		switch (myContainerType) {
+		case "left":
+			resultingCSS.float = "left";
+			break;
+		case "right":
+			resultingCSS.float = "right";
+			break;
+		default:
+			break;
+		}
+		return resultingCSS;
+	},
+	
+	buildCSSProperty : function(myPropertyName, myValue){
+		return myPropertyName + ": " + myValue + "; ";
 	},
 
 	createCSSLayout : function(myAlign, myHTMLContainer) {

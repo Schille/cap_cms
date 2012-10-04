@@ -1,8 +1,9 @@
 var Contentviewer = new Class({
     initialize: function(){
-    	this.dataItemLoader = new DataItemLoader("src/resources/content/article/");
+    	this.dataItemLoader = new DataItemLoader("src/resources/content/article/home/");
     	this.id;
     	this.container;
+    	this.category;
     	this.index;
     },
     build : function(myID, myContainer){
@@ -102,8 +103,17 @@ var Contentviewer = new Class({
 		}
 	},
 	
-	performAction : function(){
-		alert("Successful Loaded: " + this.id);
+	refresh: function () {
+		var allDocs = this.dataItemLoader.getAllDataItems();
+		var doc = this.dataItemLoader.getDataItem(allDocs[0]);
+		$('ContentViewerText').innerHTML = doc.text;
+		this.index = 0;
+	},
+	
+	
+	performAction : function(myEventInformation){
+		this.dataItemLoader = new DataItemLoader("src/resources/content/article/" + myEventInformation.actionName + "/");
+		this.refresh();
 	}
     
 });

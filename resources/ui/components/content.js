@@ -161,7 +161,7 @@ ContentViewer = new Class(
 				this.load(myContainer);
 			},
 			performAction : function(myEventInformation) {
-				alert("Received: " + myEventInformation.actionType + " from: " + myEventInformation.sender);
+				alert("Received: " + myEventInformation.actionType + " from: " + myEventInformation.actionName);
 			}
 
 		});
