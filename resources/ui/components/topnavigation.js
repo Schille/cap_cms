@@ -1,19 +1,27 @@
 var Topnavigation = new Class({
     initialize: function(){
-        this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
+    	this.dataItemLoader;
     	this.id;
     	this.container;
     	
 		this.docs = new Array();
 		var scope = this;
-		this.dataItemLoader.getAllDataItems().forEach(function(dataItem){
-			scope.docs.push(scope.dataItemLoader.getDataItem(dataItem));
-		});
     },
     build : function(myID, myContainer){
 		this.id = myID;
 		this.container = myContainer;
-	
+		if(EnvironmentalPaths.get(myID)){
+			this.dataItemLoader = new DataItemLoader(EnvironmentalPaths.get(this.id));
+		}else{
+			this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
+		}
+		
+		var scope = this;
+		this.dataItemLoader.getAllDataItems().forEach(function(dataItem){
+			scope.docs.push(scope.dataItemLoader.getDataItem(dataItem));
+		});
+		
+		
 		var ground = new Element('div',{
 			id : "ground-topnavigation",
 		})
@@ -109,7 +117,7 @@ var Topnavigation = new Class({
 			if(i != this.docs.length - 1){
 				navBarItemLink.setStyle("border-right", "1px solid rgb(0,51,204)");
 			}
-			var scope = this;
+			
 			navBarItemLink.addEvent("click",function(){
 				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).getAttribute('environment'), $(this).id, "changePage"));
 			});

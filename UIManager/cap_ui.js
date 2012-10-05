@@ -18,6 +18,7 @@ var CaPUI = new Class(
 				ComponentResolver = new Hash();
 				ComponentPlacement = new Hash();
 				ToBeRunFuctions = new Array();
+				EnvironmentalPaths = new Hash();
 
 				this.componentManager = myComponentManager;
 				this.environmentConfig = myEnvironmentConfig;
@@ -26,6 +27,14 @@ var CaPUI = new Class(
 			},
 
 			buildInitialLayout : function() {
+				if (this.environmentConfig.paths) {
+					console.log("Creating paths for environment: "
+							+ this.environment);
+					this.getEnvironmentalPaths(this.environmentConfig.paths);
+				} else {
+					console.warn("No settings for 'paths' in environment: "
+							+ this.environment);
+				}
 				// Set the look - config.json/look
 				if (this.environmentConfig.look) {
 					console.log("Creating look for environment: "
@@ -85,7 +94,12 @@ var CaPUI = new Class(
 				});
 
 			},
-
+			
+			getEnvironmentalPaths : function(config){
+				Object.each(config,function(value,item){
+					EnvironmentalPaths.set(item,value);
+				});
+			},
 			registerComponentIDs : function(config) {
 				for ( var key in config) {
 					if (config[key] instanceof Array) {

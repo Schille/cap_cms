@@ -16,29 +16,51 @@ UIManager = null;
  * EnvironmentConfig stores the environment name and the related configuration
  */
 EnvironmentConfig = new Hash();
+/**
+ * EnvironmentConfig stores the environment name and the related configuration
+ */
+GlobalPaths = new Hash();
+
 
 var CapEngine = new Class({
 	initialize : function(){
 		this.initializeConfig();
-		this.componentManager = new ComponentManager("src/resources/ui/components/");
+		if(GlobalPaths.get("components")){
+			this.componentManager = new ComponentManager(GlobalPaths.get("components"));
+		}
+		else{
+			this.componentManager = new ComponentManager("src/resources/ui/components/");
+		}
 		UIManager = new CaPUI(this.componentManager,EnvironmentConfig.get("home"), "home" , this);
 		UIManager.buildInitialLayout();
-		
 	},
 	
 	initializeConfig : function(){
 		var config = this.getConfigFile();
 		Object.each(config,function(config,item){
-			EnvironmentConfig.set(item, config);
+			if(item  == "paths"){
+				Object.each(config,function(value,item){
+					GlobalPaths.set(item,value);
+				});
+			}
+			else{
+				EnvironmentConfig.set(item, config);
+			}
+			
 		});
 	},
 	
 	changeEnvironment : function(myEnvironment){
+		if(EnvironmentConfig.get(myEnvironment) != undefined){
 		$('ground').destroy();
 		var ground = new Element('div',{ id:'ground'});
 		$('CaP').adopt(ground);
 		UIManager = new CaPUI(this.componentManager, EnvironmentConfig.get(myEnvironment),myEnvironment, this);
 		UIManager.buildInitialLayout();
+		}
+		else{
+			console.error("No configuration for environment '" + myEnvironment + "' found!");
+		}
 	},
 	
 	getConfigFile : function(){
