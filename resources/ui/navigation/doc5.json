@@ -3,5 +3,5 @@
 				"label" : "Impressum",
 				"link" : "index.html",
 				"style" : "placeholder",
-				environment : "home"
+				environment : "impressum"
 }

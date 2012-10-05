@@ -8,26 +8,51 @@ function getEngineVersion(){
  * Stores all loaded components, they are may not built.
  */
 LoadedComponents = new Hash();
+/**
+ * The UIManager for the current environment
+ */
 UIManager = null;
+/**
+ * EnvironmentConfig stores the environment name and the related configuration
+ */
+EnvironmentConfig = new Hash();
 
 var CapEngine = new Class({
 	initialize : function(){
-		
+		this.initializeConfig();
 		this.componentManager = new ComponentManager("src/resources/ui/components/");
-		UIManager = new CaPUI(this.componentManager, "home", this);
+		UIManager = new CaPUI(this.componentManager,EnvironmentConfig.get("home"), "home" , this);
 		UIManager.buildInitialLayout();
 		
 	},
 	
-	changePage : function(myEnvironment){
+	initializeConfig : function(){
+		var config = this.getConfigFile();
+		Object.each(config,function(config,item){
+			EnvironmentConfig.set(item, config);
+		});
+	},
+	
+	changeEnvironment : function(myEnvironment){
 		$('ground').destroy();
 		var ground = new Element('div',{ id:'ground'});
 		$('CaP').adopt(ground);
-		UIManager = new CaPUI(this.componentManager, myEnvironment, this);
+		UIManager = new CaPUI(this.componentManager, EnvironmentConfig.get(myEnvironment),myEnvironment, this);
 		UIManager.buildInitialLayout();
 	},
-
-
+	
+	getConfigFile : function(){
+		new Request({
+		      method: 'get',
+		      url: 'config.json',
+		      noCache : true,
+		      async : false,
+		      onSuccess: function(responseText) {
+	            feed = responseText;
+		      } 
+		    }).send();
+		return JSON.decode(feed);
+	},
 });
 
 
@@ -55,7 +80,6 @@ var ComponentLoader = new Class({
     		  onRequest: function(){ 
     		  }, 
     		  onSuccess: function(thisscript){ 
-    			  //new Element("script", {type : "text/javascript", html : script});
     			  script = thisscript;
     		  }
     	  }).send();
@@ -97,7 +121,10 @@ var ComponentLoader = new Class({
     }
 });
 
-
+/**
+ * A DataItemLoader enables several components to load the items
+ * from the sever.
+ */
 var DataItemLoader = new Class({
     initialize: function(myDataItemRoot){
         this.dataItemRoot = myDataItemRoot;
@@ -195,16 +222,3 @@ var Component = new Class({
     	return this.instance;
     }
 });
-
-function getPageConfigFile(myPageConfig){
-	new Request({
-	      method: 'get',
-	      url: myPageConfig +'.json',
-	      noCache : true,
-	      async : false,
-	      onSuccess: function(responseText) {
-            feed = responseText;
-	      } 
-	    }).send();
-	return JSON.decode(feed);
-}
