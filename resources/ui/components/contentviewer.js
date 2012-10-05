@@ -5,6 +5,7 @@ var Contentviewer = new Class({
     	this.container;
     	this.category;
     	this.index;
+    	this.language = "en";
     },
     build : function(myID, myContainer){
 		this.id = myID;
@@ -19,15 +20,58 @@ var Contentviewer = new Class({
     	
     	var ground = new Element("div", {
 			id : "ContentViewer",
-			style : "border-color: green;border-width: 1px;border-style: solid; ",
+			style : "background-color: white; margin-top : 20px;",
 
 		});
     	
+    	var title = new Element('div',{
+    		id : "ContentViewerHeadline",
+    		html : doc1.en.title,
+    	});
+    	title.setStyle("margin" , "5px");
+    	title.setStyle("font-size" , "xx-large");
+    	
+    	var infoborder = new Element('div',{
+    		id : "ContentViewerHeadline",
+    	});
+    	infoborder.setStyle("background-image" , "-moz-linear-gradient(top, #09C 25%, #06C 75%)");
+    	infoborder.setStyle("color" , "white");
+    	infoborder.setStyle("height" , "35px");
+    	infoborder.setStyle("margin" , "5px");
+    	infoborder.setStyle("border-radius" , "8px");
+    	infoborder.setStyle("vertical-align" , "bottom");
+    	
+    	var date = new Element('span',{
+    		id : "ContentViewerInfoborderDate",
+    		html : doc1.date,
+    		style : 'display:block;'
+    	});
+    	date.setStyle('margin-left', '5px');
+    	
+    	var author = new Element('span',{
+    		id : "ContentViewerInfoborderAuthor",
+    		html : 'by ' + doc1.author,
+    		style : 'display:block;'
+    	});
+    	author.setStyle("font-size" , "small");
+    	author.setStyle('margin-left', '5px');
+    	
+    	infoborder.adopt(date);
+    	infoborder.adopt(author);
+    	
+    	var textground = new Element("div", {
+    		id : "ContentViewerTextGround",
+    		html : doc1.en.text,
+		});
+    	textground.setStyle("margin" , "5px");
+    	
     	var text = new Element("div", {
     		id : "ContentViewerText",
-    		html : doc1.text,
 		});
     	
+    	text.adopt(title);
+    	text.adopt(infoborder);
+    	text.adopt(textground);
     	
     	var next = new Element("a", {
 			id : "ContentViewerNavigation_next",
@@ -52,6 +96,17 @@ var Contentviewer = new Class({
     		scope.prevDoc();
 		});
     	
+    	var changeLanguage = new Element("a", {
+			id : "ContentViewerNavigation_language",
+			href : '#',
+			html : "Language",
+			style : "margin-left:20%; margin-right: auto"
+		});
+    	
+    	changeLanguage.addEvent('click', function() {
+    		scope.changeLanguage();
+		})
+    	
     	
     	var nav = new Element("div", {
 			id : "ContentViewerNavigation",
@@ -64,7 +119,9 @@ var Contentviewer = new Class({
 
 		});
     	
+    	
     	nav.adopt(prev);
+    	nav.adopt(changeLanguage);
     	nav.adopt(next);
     	nav.adopt(clr);
     	
@@ -81,7 +138,22 @@ var Contentviewer = new Class({
 		if((allDocs.length - 1) > this.index){
 			this.index = this.index + 1;
 			var doc = this.dataItemLoader.getDataItem(allDocs[this.index]);
-			$('ContentViewerText').innerHTML = doc.text;
+			switch (this.language){
+			case "en":
+				$('ContentViewerInfoborderDate').innerHTML = doc.date;
+				$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+				$('ContentViewerHeadline').innerHTML = doc.en.title;
+				$('ContentViewerTextGround').innerHTML = doc.en.text;
+				break;
+			case "de":
+				$('ContentViewerInfoborderDate').innerHTML = doc.date;
+				$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+				$('ContentViewerHeadline').innerHTML = doc.de.title;
+				$('ContentViewerTextGround').innerHTML = doc.de.text;
+			default:
+				break;
+			}
+			
 		}
 		else{
 			alert("No more documents available!");
@@ -96,7 +168,21 @@ var Contentviewer = new Class({
 		if(0 < this.index){
 			this.index = this.index - 1;
 			var doc = this.dataItemLoader.getDataItem(allDocs[this.index]);
-			$('ContentViewerText').innerHTML = doc.text;
+			switch (this.language){
+			case "en":
+				$('ContentViewerInfoborderDate').innerHTML = doc.date;
+				$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+				$('ContentViewerHeadline').innerHTML = doc.en.title;
+				$('ContentViewerTextGround').innerHTML = doc.en.text;
+				break;
+			case "de":
+				$('ContentViewerInfoborderDate').innerHTML = doc.date;
+				$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+				$('ContentViewerHeadline').innerHTML = doc.de.title;
+				$('ContentViewerTextGround').innerHTML = doc.de.text;
+			default:
+				break;
+			}
 		}
 		else{
 			alert("No more documents available!");
@@ -106,8 +192,30 @@ var Contentviewer = new Class({
 	refresh: function () {
 		var allDocs = this.dataItemLoader.getAllDataItems();
 		var doc = this.dataItemLoader.getDataItem(allDocs[0]);
-		$('ContentViewerText').innerHTML = doc.text;
+		switch (this.language){
+		case "en":
+			$('ContentViewerInfoborderDate').innerHTML = doc.date;
+			$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+			$('ContentViewerHeadline').innerHTML = doc.en.title;
+			$('ContentViewerTextGround').innerHTML = doc.en.text;
+			break;
+		case "de":
+			$('ContentViewerInfoborderDate').innerHTML = doc.date;
+			$('ContentViewerInfoborderAuthor').innerHTML = 'by ' + doc.author;
+			$('ContentViewerHeadline').innerHTML = doc.de.title;
+			$('ContentViewerTextGround').innerHTML = doc.de.text;
+		default:
+			break;
+		}
 		this.index = 0;
+	},
+	
+	changeLanguage : function(){
+		if(this.language == "en")
+			this.language = "de";
+		else
+			this.language = "en";
+		this.refresh();
 	},
 	
 	

@@ -1,4 +1,4 @@
-var Contentviewer = new Class({
+var Topnavigation = new Class({
     initialize: function(){
         this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
     	this.id;
@@ -24,15 +24,29 @@ var Contentviewer = new Class({
 		
 		var css = new Object();
 		css.height = "100px";
-	
 
-		
 		inner.setStyle("background-image" , "-moz-linear-gradient(top, #09C 25%, #06C 75%)");
 		ground.setStyle("overflow" ,"hidden");
 		
 		inner.setStyles(css);
 
 		
+		var version  = new Element('div',{
+			id : "ground-topnavigation-section-version",
+			style : "float : right"
+		});
+		var engineVersion  = new Element('span',{
+			html : "Engine Version: " + getEngineVersion() + "</br>",
+		});
+		var uiVersion  = new Element('span',{
+			html : "UIManager Version: " + getUIVersion()
+		});
+		
+		version.adopt(engineVersion);
+		version.adopt(uiVersion);
+		
+		inner.adopt(version);
+
 		var section  = new Element('div',{
 			id : "ground-topnavigation-section",
 		});
@@ -71,15 +85,16 @@ var Contentviewer = new Class({
 		
 		for ( var i = 0; i <= this.docs.length - 1; i++) {
 			var navBarItemBullet = new Element ("li", {
-				id: this.docs[i].name,
+				id: this.docs[i].name + "_li",
 				style : "display : inline;"
 			});
 			
 			
 			var navBarItemLink = new Element ("a", {
 				href: "#",
-				name: this.docs[i].name,
+				id: this.docs[i].name,
 				html: this.docs[i].label,
+				environment : this.docs[i].environment
 				
 			});
 			
@@ -96,9 +111,10 @@ var Contentviewer = new Class({
 			}
 			var scope = this;
 			navBarItemLink.addEvent("click",function(){
-				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).name, "changeContent"));
+				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).getAttribute('environment'), $(this).id, "changePage"));
 			});
-			
+
+
 			navBarItemBullet.adopt(navBarItemLink);
 			sectionmenu.adopt(navBarItemBullet);
 			
@@ -135,6 +151,6 @@ Com = new Class({
 		
 	},
 	createInstance : function(){
-		return new Contentviewer();
+		return new Topnavigation();
 	},
 });

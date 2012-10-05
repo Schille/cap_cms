@@ -1,3 +1,12 @@
 {
-	text : "This is text 2",
+	date : "23. Juni 2012",
+	author : "Klaus Peter",
+	de : {
+		title : "Der Funktionsumfang",
+		text : "Es gibt einige coole sachen.",
+	},
+	en : {
+		title : "The Features",
+		text : "There are some coole features in here.",
+	},
 }

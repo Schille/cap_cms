@@ -1,3 +1,11 @@
 {
-	text : "This is the blog text 1",
+	
+	de : {
+		title : "Der erste Blog Eintrag",
+		text : "Dies ist mein erster Blog Eintrag. Nett!",
+	},
+	en : {
+		title : "The first Blog entry",
+		text : "This is my first Blog entry. Nice!",
+	},
 }

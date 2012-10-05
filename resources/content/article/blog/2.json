@@ -1,3 +1,11 @@
 {
-	text : "This is the blog text 2",
+	
+	de : {
+		title : "Etwas nützliches Zeug",
+		text : "Hier kann man viele schöne Dinge Eintragen",
+	},
+	en : {
+		title : "Some useful Stuff",
+		text : "Here one could type in any fency things!",
+	},
 }

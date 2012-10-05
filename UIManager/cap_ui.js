@@ -13,11 +13,20 @@ ComponentPlacement = new Hash();
 ToBeRunFuctions = new Array();
 
 
-var UIManager = new Class({
-
+var CaPUI = new Class({
+	initialize : function(myComponentManager, myEnvironment, myEngine){
+		this.componentManager = myComponentManager;
+		this.environment = myEnvironment;
+		this.engine = myEngine;
+	},
+	
 	buildInitialLayout : function() {
+		
 		//fetch the initial config file from the server
-		var config = getInitialConfigFile();
+		var config = getPageConfigFile(this.environment);
+		
+		//Set the look - config.json/look
+		this.createLook(config.look, "ground");
 		
 		//Register the components - config.json/register
 		this.registerComponentIDs(config.register);
@@ -28,8 +37,7 @@ var UIManager = new Class({
 		//Build the initial layout container
 		$("ground").adopt(this.buildContainer(config.layout, "ground"));
 		
-		//Set the look - config.json/look
-		this.createLook(config.look, "ground");
+
 		
 		//invoke the build method of the configured components 
 		ComponentResolver.forEach(function(comp, name) {
@@ -55,11 +63,9 @@ var UIManager = new Class({
 	},
 	triggerAffiliatedComponents : function(sender) {
 		if (sender instanceof EventInformation) {
-			if (sender.actionType == "sizeChanged") {
-				this.sizeChanged(sender.sender);
-				return;
+			if(sender.environment != this.environment){
+				this.changePage(sender.environment)
 			}
-
 			slave = ComponentAffiliation.get(sender.sender);
 			if (slave != undefined) {
 				if (slave instanceof Array) {
@@ -84,6 +90,14 @@ var UIManager = new Class({
 	createLook : function(myConfig, myContainer){
 		if(myConfig.background){
 			$(myContainer).setStyle("background-color", myConfig.background);
+		}
+		
+		if(myConfig.image){
+			var bgimg = new Element('img',{
+				src : myConfig.image,
+				style : "left: 0;position: absolute;top: 0;width: 100%;height : 100%; z-index: -5000;",
+			});
+			$(myContainer).adopt(bgimg);
 		}
 		
 		//Add more config attributes here!
@@ -123,7 +137,7 @@ var UIManager = new Class({
 			}
 			//Check whether a component has been configured
 			if(myPlacement.header.component){
-				var comp = componentManager.initializeComponent(ComponentIDs
+				var comp = this.componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.header.component), header);
 				ComponentResolver.set(myPlacement.header.component, comp);
 				ComponentPlacement.set(myPlacement.header.component, header);
@@ -148,13 +162,13 @@ var UIManager = new Class({
 			}
 			//Check whether a component has been configured
 			if(myPlacement.left.component){
-				var comp = componentManager.initializeComponent(ComponentIDs
+				var comp = this.componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.left.component), left);
 				ComponentResolver.set(myPlacement.left.component, comp);
 				ComponentPlacement.set(myPlacement.left.component, left);
 				left.adopt(comp);
 			}
-			groundPanel.adopt(left);
+			groundPanel.adopt(left);	
 		}
 		//LEFT END -----
 		
@@ -173,7 +187,7 @@ var UIManager = new Class({
 			}
 			//Check whether a component has been configured
 			if(myPlacement.right.component){
-				var comp = componentManager.initializeComponent(ComponentIDs
+				var comp = this.componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.right.component), right);
 				ComponentResolver.set(myPlacement.right.component, comp);
 				ComponentPlacement.set(myPlacement.right.component, right);
@@ -198,7 +212,7 @@ var UIManager = new Class({
 			}
 			//Check whether a component has been configured
 			if(myPlacement.center.component){
-				var comp = componentManager.initializeComponent(ComponentIDs
+				var comp = this.componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.center.component), center);
 				ComponentResolver.set(myPlacement.center.component, comp);
 				ComponentPlacement.set(myPlacement.center.component, center);
@@ -227,7 +241,7 @@ var UIManager = new Class({
 			}
 			//Check whether a component has been configured
 			if(myPlacement.footer.component){
-				var comp = componentManager.initializeComponent(ComponentIDs
+				var comp = this.componentManager.initializeComponent(ComponentIDs
 						.get(myPlacement.footer.component), footer);
 				ComponentResolver.set(myPlacement.footer.component, comp);
 				ComponentPlacement.set(myPlacement.footer.component, footer);
@@ -328,105 +342,18 @@ var UIManager = new Class({
 		});
 		$(document.head).adopt(containerCSS);
 	},
-
-	setLeftHeight : function(container) {
-		var height = 0;
-		var brosis = $(container).getParent().getChildren();
-
-		brosis.each(function(value) {
-			if (height <= value.getHeight()) {
-				height = value.getHeight();
-			}
-		});
-		// height + ComponentPlacement.get().getHeight();
-
-		return height;
-
+	
+	changePage : function(myPage){
+		this.engine.changePage(myPage)
 	},
 
-	cssStyleFormat : function(myAlign, myContainer) {
-
-		if (myAlign == "header") {
-			/*
-			 * Header
-			 * -----------------------------------------------------------------------------
-			 */
-			return "div#" + myContainer + "{" + "width:100%;"
-					+ "overflow:auto;" + "display:block;"
-					+ "position : relative;" + "background-color:#D9B6B6;"
-					+ "}";
-		}
-
-		if (myAlign == "center") {
-			/*
-			 * Center
-			 * -----------------------------------------------------------------------------
-			 */
-			return "div#" + myContainer + "{" + //	"float: left;" +
-			"overflow : auto;" +
-			// " display: block;"+
-			//"z-index: -1;" +
-			// " width: 200px;" + "" +
-			"position: relative;" + "background: #7FE940;" + "}";
-		}
-
-		if (myAlign == "left") {
-			/*
-			 * Sidebar Left
-			 * -----------------------------------------------------------------------------
-			 */
-			return "div#" + myContainer + "{" + "float: left;" +
-			 "width: inherint;"+
-			"position: relative;" + "background: #B5E3FF;" +
-			// " left: -250px;"+
-			"height: inherit;" +
-
-			"}";
-		}
-
-		if (myAlign == "right") {
-			/*
-			 * Sidebar Right
-			 * -----------------------------------------------------------------------------
-			 */
-			return "div#" + myContainer + "{" + "float: right;" +
-			// " margin-right: -250px;"+
-			// " width: 250px;"+
-			// " position: relative;"
-			+"	background: #FFACAA;" +
-			// " left: -250px;"+
-			"height: inherit;" +
-			"}";
-		}
-
-		if (myAlign == "footer") {
-			/*
-			 * Footer
-			 * -----------------------------------------------------------------------------
-			 */
-			return "div#" + myContainer + "{" + "height: 200%;" +
-			// " margin: -200px auto 0;";+
-			"background: #BFF08E;" + "position: relative;" + "}";
-		}
-		return "";
-	},
-
-	getFooterCSS : function(myContainer, mySubMargin) {
-		var containerCSS = new Element('style', {
-			type : "text/css",
-			html : "div#" + myContainer + "{" +
-			// " height: 200px;"+
-			"margin: -" + mySubMargin + "px auto 0;" + "background: #BFF08E;"
-					+ "position: relative;" + "}",
-		});
-		$(document.head).adopt(containerCSS);
-	}
 });
 
 var EventInformation = new Class({
-	initialize : function(mySender, myActionName, myActionType) {
+	initialize : function(mySender,myEnvironment, myActionName, myActionType) {
 		this.sender = mySender;
 		this.actionName = myActionName;
 		this.actionType = myActionType;
+		this.environment = myEnvironment;
 	},
 });

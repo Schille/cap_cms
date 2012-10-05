@@ -1,3 +1,12 @@
 {
-	text : "Welcome to <b>CaP CMS</b>",
+	date : "1. April 2011",
+	author : "Michael Schilonka",
+	de : {
+		title : "Das CaP CMS",
+		text : "Wilkommen bei <b>CaP CMS</b>",
+	},
+	en : {
+		title : "The CaP CMS",
+		text : "Welcome to <b>CaP CMS</b>",
+	},
 }

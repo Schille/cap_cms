@@ -2,5 +2,6 @@
 				"name" : "home",
 				"label" : "Home",
 				"link" : "index.html",
-				"style" : "placeholder"
+				"style" : "placeholder",
+				environment : "home"
 }

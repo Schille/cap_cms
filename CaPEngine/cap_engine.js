@@ -8,6 +8,28 @@ function getEngineVersion(){
  * Stores all loaded components, they are may not built.
  */
 LoadedComponents = new Hash();
+UIManager = null;
+
+var CapEngine = new Class({
+	initialize : function(){
+		
+		this.componentManager = new ComponentManager("src/resources/ui/components/");
+		UIManager = new CaPUI(this.componentManager, "home", this);
+		UIManager.buildInitialLayout();
+		
+	},
+	
+	changePage : function(myEnvironment){
+		$('ground').destroy();
+		var ground = new Element('div',{ id:'ground'});
+		$('CaP').adopt(ground);
+		UIManager = new CaPUI(this.componentManager, myEnvironment, this);
+		UIManager.buildInitialLayout();
+	},
+
+
+});
+
 
 
 /**
@@ -24,6 +46,7 @@ var ComponentLoader = new Class({
     	script = "";
     	new Request({ 
     		  method: 'get', 
+    	      noCache : true,
     		  url: this.scriptRoot + myScriptName, 
     		  async : false,
     		  onFailure: function(xhr){
@@ -45,6 +68,7 @@ var ComponentLoader = new Class({
     	var documents = new Array();
     	new Request({
     	      method: 'get',
+    	      noCache : true,
     	      url: this.scriptRoot,
     	      async : false,
     	      onSuccess: function(responseText) {
@@ -85,6 +109,7 @@ var DataItemLoader = new Class({
     	var documents = new Array(); 
     	new Request({
     	      method: 'get',
+    	      noCache : true,
     	      url: this.dataItemRoot,
     	      async : false,
     	      onSuccess: function(responseText) {
@@ -109,6 +134,7 @@ var DataItemLoader = new Class({
     	new Request({
   	      method: 'get',
   	      url: this.dataItemRoot + myDoc,
+	      noCache : true,
   	      async : false,
   	      onSuccess: function(responseText) {
               feed = responseText;
@@ -170,10 +196,11 @@ var Component = new Class({
     }
 });
 
-function getInitialConfigFile(){
+function getPageConfigFile(myPageConfig){
 	new Request({
 	      method: 'get',
-	      url: "config.json",
+	      url: myPageConfig +'.json',
+	      noCache : true,
 	      async : false,
 	      onSuccess: function(responseText) {
             feed = responseText;
