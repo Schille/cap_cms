@@ -1,0 +1,12 @@
+{
+	date : "1. April 2011",
+	author : "Robert Stein",
+	de : {
+		title : "Das CaP CMS",
+		text : "Any Article here to load",
+	},
+	en : {
+		title : "The CaP CMS",
+		text : "Any Article here to load",
+	},
+}

@@ -7,6 +7,71 @@ var Contentviewer = new Class({
     	this.index;
     	this.language = "en";
     },
+    
+    
+    addDoc : function (index) {
+
+		var allDocs = this.dataItemLoader.getAllDataItems();
+		var doc1 = this.dataItemLoader.getDataItem(allDocs[index]);
+		
+		//We need to build a new article and return it to the function which called
+		//us here
+		var title = new Element('div',{
+    		id : "ContentViewerHeadline",
+    		html : doc1.en.title,
+    	});
+    	title.setStyle("margin" , "5px");
+    	title.setStyle("font-size" , "xx-large");
+    	
+    	var infoborder = new Element('div',{
+    		id : "ContentViewerHeadline",
+    	});
+    	infoborder.setStyle("background-image" , "-moz-linear-gradient(top, #09C 25%, #06C 75%)");
+    	infoborder.setStyle("color" , "white");
+    	infoborder.setStyle("height" , "35px");
+    	infoborder.setStyle("margin" , "5px");
+    	infoborder.setStyle("border-radius" , "8px");
+    	infoborder.setStyle("vertical-align" , "bottom");
+    	
+    	var date = new Element('span',{
+    		id : "ContentViewerInfoborderDate",
+    		html : doc1.date,
+    		style : 'display:block;'
+    	});
+    	date.setStyle('margin-left', '5px');
+    	
+    	var author = new Element('span',{
+    		id : "ContentViewerInfoborderAuthor",
+    		html : 'by ' + doc1.author,
+    		style : 'display:block;'
+    	});
+    	author.setStyle("font-size" , "small");
+    	author.setStyle('margin-left', '5px');
+    	
+    	infoborder.adopt(date);
+    	infoborder.adopt(author);
+    	
+    	var textground = new Element("div", {
+    		id : "ContentViewerTextGround",
+    		html : doc1.en.text,
+		});
+    	textground.setStyle("margin" , "5px");
+    	textground.setStyle("height" , "400px");
+    	
+    	var text = new Element("div", {
+    		id : "ContentViewerText",
+		});
+    	text.adopt(title);
+    	text.adopt(infoborder);
+    	text.adopt(textground);
+    	
+    	return text;
+		
+		
+	},
+    
+    
+    
     build : function(myID, myContainer){
 		this.id = myID;
 		this.container = myContainer;
@@ -105,7 +170,7 @@ var Contentviewer = new Class({
     	
     	changeLanguage.addEvent('click', function() {
     		scope.changeLanguage();
-		})
+		});
     	
     	
     	var nav = new Element("div", {
@@ -128,9 +193,37 @@ var Contentviewer = new Class({
     	
     	ground.adopt(text);
     	ground.adopt(nav);
-   	
-		
+    	
+    	this.index++;
+    	ground.adopt(this.addDoc(this.index));
+    	var trigger = false;
+    	this.index++;
+    	var lastArt = this.addDoc(this.index);
+    	var scroller = function(){
+    		if(((document.getScroll().y+lastArt.getHeight())/lastArt.getPosition().y) >= 0.95 && 
+    				trigger == false) {
+    			trigger = true;	
+    			scope.index++;
+    			ground.adopt(scope.addDoc(scope.index));
+    			if(allDocs.length-1 == scope.index) {
+    				document.removeEvent('scroll', scope.scroller);
+        			trigger = true;	
+
+    			}
+    			else {
+    				trigger = false;
+    			}
+    		}
+    	};
+    	
+      	document.addEvent('scroll', scroller);
+    	
+    	ground.adopt(lastArt);
+
 		$(myContainer).adopt(ground);
+		
+ 
+		
     },
     
 	nextDoc: function () {
@@ -209,6 +302,9 @@ var Contentviewer = new Class({
 		}
 		this.index = 0;
 	},
+	
+	
+	
 	
 	changeLanguage : function(){
 		if(this.language == "en")
