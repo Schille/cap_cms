@@ -47,6 +47,10 @@ var CapEngine = new Class({
 		      url: 'config.json',
 		      noCache : true,
 		      async : false,
+		      onFailure : function(){
+		    	  console.error("Could not load the configuration file!");
+		    	  alert("Could not load the configuration file! Perhaps it is not deployed or named correctly.");
+		      },
 		      onSuccess: function(responseText) {
 	            feed = responseText;
 		      } 
