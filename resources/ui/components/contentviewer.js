@@ -184,6 +184,8 @@ var Contentviewer = new Class({
 
 		});
     	
+    	this.index++;
+    	
     	
     	nav.adopt(prev);
     	nav.adopt(changeLanguage);
@@ -194,17 +196,29 @@ var Contentviewer = new Class({
     	ground.adopt(text);
     	ground.adopt(nav);
     	
-    	this.index++;
-    	ground.adopt(this.addDoc(this.index));
-    	var trigger = false;
+    	
+    	//Variable declares how many articles are shown, besides the first article.
+    	//so that there are shownArticles+1 articles shown
+    	var shownArticles = 3;
+    	
+    	for(var i = this.index; i < shownArticles; i++) {
+    		ground.adopt(this.addDoc(i));
+    		this.index = i;
+    	}
+  
+    	
+    	
     	this.index++;
     	var lastArt = this.addDoc(this.index);
+    	
+    	var trigger = false;
     	var scroller = function(){
-    		if(((document.getScroll().y+lastArt.getHeight())/lastArt.getPosition().y) >= 0.95 && 
+    		if(((document.getScroll().y+lastArt.getHeight()/2)/lastArt.getPosition().y) >= 0.95 && 
     				trigger == false) {
     			trigger = true;	
     			scope.index++;
-    			ground.adopt(scope.addDoc(scope.index));
+    			lastArt = scope.addDoc(scope.index);
+    			ground.adopt(lastArt);
     			if(allDocs.length-1 == scope.index) {
     				document.removeEvent('scroll', scope.scroller);
         			trigger = true;	

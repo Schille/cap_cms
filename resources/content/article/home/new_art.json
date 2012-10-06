@@ -1,0 +1,12 @@
+{
+	date : "1. April 2011",
+	author : "Michael Schilonka",
+	de : {
+		title : "Das CaP CMS",
+		text : "mopf mopfer",
+	},
+	en : {
+		title : "The CaP CMS",
+		text : "mapf mapfer",
+	},
+}
