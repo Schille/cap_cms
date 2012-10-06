@@ -11,11 +11,13 @@ var Contentviewer = new Class({
     
     addDoc : function (index) {
 
+    	//Loading list of articles but not the articles themselves
 		var allDocs = this.dataItemLoader.getAllDataItems();
 		var doc1 = this.dataItemLoader.getDataItem(allDocs[index]);
 		
-		//We need to build a new article and return it to the function which called
-		//us here
+		//Building article here, define style tag, id tags, the divs etc...
+		//This is the title, getting the content from the title tag of the json
+		//document
 		var title = new Element('div',{
     		id : "ContentViewerHeadline",
     		html : doc1.en.title,
@@ -23,9 +25,12 @@ var Contentviewer = new Class({
     	title.setStyle("margin" , "5px");
     	title.setStyle("font-size" , "xx-large");
     	
+    	
+    	//The infoboarder contains information about the author, date etc..
     	var infoborder = new Element('div',{
     		id : "ContentViewerHeadline",
     	});
+    	//setting some css here
     	infoborder.setStyle("background-image" , "-moz-linear-gradient(top, #09C 25%, #06C 75%)");
     	infoborder.setStyle("color" , "white");
     	infoborder.setStyle("height" , "35px");
@@ -48,9 +53,13 @@ var Contentviewer = new Class({
     	author.setStyle("font-size" , "small");
     	author.setStyle('margin-left', '5px');
     	
+    	//adopt the span-elements to the infoborder-div
     	infoborder.adopt(date);
     	infoborder.adopt(author);
     	
+    	
+    	//textground defines the area of the actual article content
+    	//The actual article is displayed here.
     	var textground = new Element("div", {
     		id : "ContentViewerTextGround",
     		html : doc1.en.text,
@@ -58,6 +67,8 @@ var Contentviewer = new Class({
     	textground.setStyle("margin" , "5px");
     	textground.setStyle("height" , "400px");
     	
+    	//In the end the text-div is built here and all the given elements
+    	//are united in this div.
     	var text = new Element("div", {
     		id : "ContentViewerText",
 		});
@@ -81,7 +92,7 @@ var Contentviewer = new Class({
 		var allDocs = this.dataItemLoader.getAllDataItems();
 		var doc1 = this.dataItemLoader.getDataItem(allDocs[this.index]);
 
-    	
+    	//Lookup addDoc to get more information. First article to be created here.
     	
     	var ground = new Element("div", {
 			id : "ContentViewer",
@@ -206,18 +217,31 @@ var Contentviewer = new Class({
     	//last aricle is overscrolled
     	var reloadArticles = 2;
     	
+    	
+    	//Loop to display #shownArticle-1 articles.
     	for(var i = this.index; i < shownArticles; i++) {
     		ground.adopt(this.addDoc(i));
     		this.index = i;
     	}
   
     	
+    	//After the loop we need to add the last article with the scroller event
+    	//It triggers always if the user scrolls over the half of the last 
+    	//article
     	
+    	//Adopting the last article for the 1st time.
     	this.index++;
     	var lastArt = this.addDoc(this.index);
 
+    	//This trigger makes sure, that the scroll event proceeds its actions
+    	//only one time simultaneously
     	var trigger = false;
     	
+    	
+    	//The scroller event consists of the algorithm the detect the scrolling 
+    	//over the first half of the last article. If it isn't already active
+    	//it will perform the reload action and will add #reloadArticles articles
+    	//to the content
     	var scroller = function(){
     		if(((document.getScroll().y+lastArt.getHeight()/2)/lastArt.getPosition().y) >= 0.95 && 
     				trigger == false) {
@@ -232,26 +256,37 @@ var Contentviewer = new Class({
     			scope.index++;
     			lastArt = scope.addDoc(scope.index);
     			ground.adopt(lastArt);
+    			
+    			//If all articles are loaded, the event will be removed.
     			if(allDocs.length-1 == scope.index) {
     				document.removeEvent('scroll', scope.scroller);
         			trigger = true;	
 
     			}
     			else {
+    				//When the action is performed the trigger is resetted.
     				trigger = false;
     			}
     		}
     	};
     	
+    	//Just appending the event to the document.
       	document.addEvent('scroll', scroller);
     	
+      	//Appending the lastArt from before the loop to the ground.
     	ground.adopt(lastArt);
 
+    	//Adding the while content to the container within the HTML.
 		$(myContainer).adopt(ground);
 		
  
 		
     },
+    
+    /*
+     * Only some function from the previous version of the content viewer.
+     * Actually could be deleted.
+     */
     
 	nextDoc: function () {
 		var allDocs = this.dataItemLoader.getAllDataItems();
@@ -309,6 +344,8 @@ var Contentviewer = new Class({
 		}
 	},
 	
+	
+	//Refresh the change the language. Actually just resetting some innerHTML
 	refresh: function () {
 		var allDocs = this.dataItemLoader.getAllDataItems();
 		var doc = this.dataItemLoader.getDataItem(allDocs[0]);
@@ -333,6 +370,7 @@ var Contentviewer = new Class({
 	
 	
 	
+	
 	changeLanguage : function(){
 		if(this.language == "en")
 			this.language = "de";
@@ -341,6 +379,8 @@ var Contentviewer = new Class({
 		this.refresh();
 	},
 	
+	
+	//Needs to be implemented when any component talks to me.
 	
 	performAction : function(myEventInformation){
 		this.dataItemLoader = new DataItemLoader("src/resources/content/article/" + myEventInformation.actionName + "/");
