@@ -243,7 +243,7 @@ var Contentviewer = new Class({
     	//it will perform the reload action and will add #reloadArticles articles
     	//to the content
     	var scroller = function(){
-    		if(((document.getScroll().y+lastArt.getHeight()/2)/lastArt.getPosition().y) >= 0.95 && 
+    		if(((document.getScroll().y+lastArt.getHeight()/2)/lastArt.getPosition().y) >= 0.50 && 
     				trigger == false) {
     			trigger = true;	
     			
