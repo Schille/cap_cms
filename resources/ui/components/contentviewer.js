@@ -199,7 +199,12 @@ var Contentviewer = new Class({
     	
     	//Variable declares how many articles are shown, besides the first article.
     	//so that there are shownArticles+1 articles shown
-    	var shownArticles = 3;
+    	var shownArticles = 2;
+    	
+    	
+    	//Varibale declares how many Articles are reloaded when half of the
+    	//last aricle is overscrolled
+    	var reloadArticles = 2;
     	
     	for(var i = this.index; i < shownArticles; i++) {
     		ground.adopt(this.addDoc(i));
@@ -210,12 +215,20 @@ var Contentviewer = new Class({
     	
     	this.index++;
     	var lastArt = this.addDoc(this.index);
-    	
+
     	var trigger = false;
+    	
     	var scroller = function(){
     		if(((document.getScroll().y+lastArt.getHeight()/2)/lastArt.getPosition().y) >= 0.95 && 
     				trigger == false) {
     			trigger = true;	
+    			
+    			for(var i = 1; i < reloadArticles; i++) {
+    				scope.index++;
+    				lastArt = scope.addDoc(scope.index);
+        			ground.adopt(lastArt);
+        			
+    			}
     			scope.index++;
     			lastArt = scope.addDoc(scope.index);
     			ground.adopt(lastArt);
