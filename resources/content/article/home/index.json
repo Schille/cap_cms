@@ -1,0 +1,25 @@
+
+{
+label :{ 
+			Schilonka : ["1Welcome_to_cap_cms.json","hello_world.json", "2.json"],
+
+			Stein :  ["new_art.json", "new_art2.json"],
+			
+			welcome : ["1Welcome_to_cap_cms.json"]
+		
+},
+
+article : {
+			"1Welcome_to_cap_cms.json" : ["Schilonka","welcome"],
+			
+			"2.json" : ["Schilonka","2ndthing"],
+			
+			"hello_world.json" : ["Schilonka"],
+			
+			"new_art.json" : ["Stein"],
+			
+			"new_art2.json" : ["Stein"],
+			
+			"the4.json" : [],
+}
+}
