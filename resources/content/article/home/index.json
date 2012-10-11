@@ -1,11 +1,13 @@
 
 {
 label :{ 
-			Schilonka : ["1Welcome_to_cap_cms.json","hello_world.json", "2.json"],
+			Schilonka : ["1Welcome_to_cap_cms.json", "2.json", "hello_world.json"],
 
 			Stein :  ["new_art.json", "new_art2.json"],
 			
-			welcome : ["1Welcome_to_cap_cms.json"]
+			welcome : ["1Welcome_to_cap_cms.json"],
+			
+			"2ndthing" : ["2.json"]
 		
 },
 

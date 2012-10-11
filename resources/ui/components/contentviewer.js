@@ -12,24 +12,39 @@ var Contentviewer = new Class(
 				this.article_labels = new Hash();
 			},
 			
-			addLabel : function (allDocs, index) {
-				//alert(allDocs[index]);
-				var htmltext = this.article_labels.get(allDocs[index]);
-			
+			addLabel : function (index) {
+				//alert(this.allDocs[index]);
+				var htmltext = this.article_labels.get(this.allDocs[index]);
+				scope = this;
 				var labelborder = new Element('div', {
 					id : "ContentViewerLabel",
-					html : htmltext,
+					html: 'Labels: '
 				});
+				
+				if(htmltext != null) {
+					for(var i = 0; i < htmltext.length; i++) {
+						
+							var specific_label = new Element('a', {
+										html:  htmltext[i] + ' ',
+							});
+							specific_label.addEvent('click', function() {
+								scope.performLabelAction(this.text.substring(0, this.text.length-1));
+							});
+							labelborder.adopt(specific_label);
+					}
+				}
+				
+				
 				
 				return labelborder;
 				
 			},
 
-			addDoc : function(allDocs, index) {
+			addDoc : function(index) {
 
 				// Loading list of articles but not the articles themselves
 				
-				var doc1 = this.dataItemLoader.getDataItem(allDocs[index]);
+				var doc1 = this.dataItemLoader.getDataItem(this.allDocs[index]);
 				console.log('Was called to add another article.');
 				/* Building article here, define style tag, id tags, the divs etc...
 				 * This is the title, getting the content from the title tag of the 
@@ -93,7 +108,7 @@ var Contentviewer = new Class(
 				text.adopt(title);
 				text.adopt(infoborder);
 				text.adopt(textground);
-				text.adopt(this.addLabel(allDocs, index));
+				text.adopt(this.addLabel(index));
 
 				console.log('Returning the article-element.');
 				return text;
@@ -105,16 +120,19 @@ var Contentviewer = new Class(
 				this.container = myContainer;
 				this.index = 0;
 				document.removeEvent('scroll', this.scroller);
-				var allDocs = this.dataItemLoader.getAllDataItems();
+				console.log('Removing scrolling event');
+				if(this.allDocs == null) {
+					this.allDocs = this.dataItemLoader.getAllDataItems();
+				}
 				var scope = this;
 				/* Get the index.json. From this file the labels are read and
 				 * added to the according article. 
 				 */ 
 				
-				for(var i = 0; i < allDocs.length; i++) {
-					if(allDocs[i] == 'index.json') {
-						var temp_labels = this.dataItemLoader.getDataItem(allDocs[i]);
-						allDocs.splice(i,1);
+				for(var i = 0; i < this.allDocs.length; i++) {
+					if(this.allDocs[i] == 'index.json') {
+						var temp_labels = this.dataItemLoader.getDataItem(this.allDocs[i]);
+						this.allDocs.splice(i,1);
 					}
 				}
 				
@@ -146,12 +164,12 @@ var Contentviewer = new Class(
 				var allLoaded = false;
 				// Loop to display #shownArticle-1 articles.
 				for ( var i = this.index; i < shownArticles - 1; i++) {
-					if (this.index < allDocs.length - 1) {
-						ground.adopt(this.addDoc(allDocs, i));
+					if (this.index < this.allDocs.length - 1) {
+						ground.adopt(this.addDoc(i));
 						this.index = i;
 
 					} else {
-						if (this.index == allDocs.length - 1) {
+						if (this.index == this.allDocs.length - 1) {
 							console
 									.warn('There are not enough articles (less then defined to load on startup) trying to adopt last article.');
 							this.index--;
@@ -171,7 +189,7 @@ var Contentviewer = new Class(
 				// Adopting the last article for the 1st time.
 				if (!allLoaded) {
 					this.index++;
-					var lastArt = this.addDoc(allDocs, this.index);
+					var lastArt = this.addDoc(this.index);
 					console.log('Last article is adopted');
 
 				}
@@ -195,30 +213,30 @@ var Contentviewer = new Class(
 						trigger = true;
 						console.log('Reloading articles...');
 						for ( var i = 1; i < reloadArticles; i++) {
-							if (scope.index <= allDocs.length - 1) {
+							if (scope.index <= scope.allDocs.length - 1) {
 								scope.index++;
-								lastArt = scope.addDoc(allDocs, scope.index);
+								lastArt = scope.addDoc(scope.index);
 								ground.adopt(lastArt);
 							} else {
 								console
-										.warn('No more articles to load. Breaking and removing reload.');
-								document.removeEvent('scroll', this.scroller);
+										.warn('No more articles to load. Breaking and removing reload. - 1');
+								document.removeEvent('scroll', scope.scroller);
 							}
 						}
 						scope.index++;
-						if (scope.index <= allDocs.length - 1) {
-							lastArt = scope.addDoc(allDocs, scope.index);
+						if (scope.index <= scope.allDocs.length - 1) {
+							lastArt = scope.addDoc(scope.index);
 							ground.adopt(lastArt);
 						} else {
 							console
-									.warn('No more articles to load. Breaking and removing reload.');
-							document.removeEvent('scroll', this.scroller);
+									.warn('No more articles to load. Breaking and removing reload. - 2 ');
+							document.removeEvent('scroll', scope.scroller);
 						}
 
 						// If all articles are loaded, the event will be
 						// removed.
-						if (allDocs.length - 1 == scope.index) {
-							document.removeEvent('scroll', this.scroller);
+						if (scope.allDocs.length - 1 == scope.index) {
+							document.removeEvent('scroll', scope.scroller);
 							console
 									.log('All available articles loaded. Removed reloadEvent.');
 							trigger = true;
@@ -234,7 +252,8 @@ var Contentviewer = new Class(
 				// Just appending the event to the document. This is only
 				// necessary if
 				// there are some articles left to load.
-				if (this.index < allDocs.length - 1) {
+				if (this.index < this.allDocs.length - 1) {
+					console.log('Appending scrolling event.')
 					document.addEvent('scroll', this.scroller);
 				}
 
@@ -250,8 +269,19 @@ var Contentviewer = new Class(
 			 * isn't an article anymore.
 			 */ 
 			
+			performLabelAction : function(linklabel) {
+				if($('ContentViewer') != null) {
+				$('ContentViewer').destroy();
+				}
+				
+				this.allDocs = this.labels.get(linklabel);
+				this.allDocs.push('index.json');
+				this.build(this.id, this.container);
+			},
+			
 			performAction : function(myEventInformation) {
 				//Deleting the existing contentviewer element in the HTML
+
 				$('ContentViewer').destroy();
 				//Retrieving the desired content by the link.
 				this.dataItemLoader = new DataItemLoader(
@@ -259,9 +289,10 @@ var Contentviewer = new Class(
 								+ myEventInformation.actionName + "/");
 				//Building the new contentviewer element.
 				this.build(this.id, this.container);
-			}
+				
 
-		});
+		}
+			});
 
 Com = new Class({
 	initialize : function() {
