@@ -25,6 +25,7 @@ GlobalPaths = new Hash();
 var CapEngine = new Class({
 	initialize : function(){
 		this.initializeConfig();
+		new SecurityManager();
 		if(GlobalPaths.get("components")){
 			this.componentManager = new ComponentManager(GlobalPaths.get("components"));
 		}
@@ -43,7 +44,7 @@ var CapEngine = new Class({
 					GlobalPaths.set(item,value);
 				});
 			}
-			else{
+			else{;
 				EnvironmentConfig.set(item, config);
 			}
 			
@@ -64,7 +65,7 @@ var CapEngine = new Class({
 	},
 	
 	getConfigFile : function(){
-		new Request({
+		var request = new Request.JSON({
 		      method: 'get',
 		      url: 'config.json',
 		      noCache : true,
@@ -73,14 +74,26 @@ var CapEngine = new Class({
 		    	  console.error("Could not load the configuration file!");
 		    	  alert("Could not load the configuration file! Perhaps it is not deployed or named correctly.");
 		      },
-		      onSuccess: function(responseText) {
-	            feed = responseText;
-		      } 
+		      onSuccess: function(responseJSON, responseText){
+		    	  
+		      },
 		    }).send();
-		return JSON.decode(feed);
-	},
+		
+		return JSON.decode(request.response.text);
+	}
 });
 
+var SecurityManager = new Class({
+	initialize : function(){
+		var req = new Request({
+				url : 'archive/2.json',
+	        	method: 'post',
+	        	data      : '{test: "123"}',
+		    });
+		req.setHeader("Content-Type", "text/plain");
+		req.send();
+	}
+});
 
 
 /**
@@ -94,8 +107,7 @@ var ComponentLoader = new Class({
      * Fetch and inject the given script.
      */
     loadScript : function(myScriptName){
-    	script = "";
-    	new Request({ 
+    	var request = new Request({ 
     		  method: 'get', 
     	      noCache : true,
     		  url: this.scriptRoot + myScriptName, 
@@ -109,14 +121,19 @@ var ComponentLoader = new Class({
     			  script = thisscript;
     		  }
     	  }).send();
-    	return script;
+		var script = new Element('script',{
+			html : request.response.text,
+		});
+		
+		return request.response.text;
+    	
     },
     /**
      * Returns an array of all documents in the given directory.
      */
     getAllAvailableComponents : function(){
     	var documents = new Array();
-    	new Request({
+    	new Request.JSON({
     	      method: 'get',
     	      noCache : true,
     	      url: this.scriptRoot,
@@ -126,14 +143,11 @@ var ComponentLoader = new Class({
     	      } 
     	    }).send();
 
-    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
-    	    if(index != 0) {
-    	    	var doc = img.get('href');
-    	    		if(doc.test('.*.js$')){
-    	    			documents = documents.append([doc]);
-    	    		}
-    	    }
-    	});	
+    	var json =  JSON.decode(request.response.text);
+		
+		json.each(function(component){
+			documents.push(component);
+		});
     	return documents;
     },
     /**
@@ -160,31 +174,29 @@ var DataItemLoader = new Class({
      */
     getAllDataItems : function(){
     	var documents = new Array(); 
-    	new Request({
-    	      method: 'get',
-    	      noCache : true,
+    	var request = new Request({
+    		header: {"X-JsonIndex": true},
+    	      noCache : false,
     	      url: this.dataItemRoot,
-    	      async : false,
-    	      onSuccess: function(responseText) {
-                  feed = responseText;
-    	      } 
-    	    }).send();
-
-    	new Element("div", { html: feed }).getElements("li a").forEach(function(img, index){
-    	    if(index != 0) {
-    	    	var doc = img.get('href');
-    	    		if(doc.test('.*.json$')){
-    	    			documents = documents.append([doc]);
-    	    		}
-    	    }
-    	});
+    	      async : false, 
+    	    });
+    	request.setHeader("X-JsonIndex", true);
+    	request.get('json=true');
+    	
+		var json =  JSON.decode(request.response.text).files;
+		
+		json.each(function(component){
+			if(!component.dir){
+				documents.push(component.name);
+			}
+		});
     	return documents;
     },
     /**
      * Fetches a DataItem(JSON) document.
      */
     getDataItem : function(myDoc){
-    	new Request({
+    	var request = new Request.JSON({
   	      method: 'get',
   	      url: this.dataItemRoot + myDoc,
 	      noCache : true,
@@ -194,7 +206,7 @@ var DataItemLoader = new Class({
   	      } 
   	    }).send();
 
-  	return JSON.decode(feed);
+  	return JSON.decode(request.response.text);
     }
     
 });

@@ -10,8 +10,10 @@ var Topnavigation = new Class({
     build : function(myID, myContainer){
 		this.id = myID;
 		this.container = myContainer;
+		
 		if(EnvironmentalPaths.get(myID)){
 			this.dataItemLoader = new DataItemLoader(EnvironmentalPaths.get(this.id));
+			
 		}else{
 			this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
 		}

@@ -1,0 +1,6 @@
+AuthType Digest
+AuthName "HTTP Digest Access"
+AuthDigestProvider file
+AuthUserFile /opt/lampp/htdocs/CaPCMS/src/resources/protected/htdigestuser.pwd
+#oder
+Require valid-user
