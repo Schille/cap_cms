@@ -28,63 +28,63 @@ var CaPUI = new Class(
 
 			buildInitialLayout : function() {
 				if (this.environmentConfig.paths) {
-					console.log("Creating paths for environment: "
+					console.log("[CaP UI] Creating paths for environment: "
 							+ this.environment);
 					this.getEnvironmentalPaths(this.environmentConfig.paths);
 				} else {
-					console.warn("No settings for 'paths' in environment: "
+					console.warn("[CaP UI] No settings for 'paths' in environment: "
 							+ this.environment);
 				}
 				// Set the look - config.json/look
 				if (this.environmentConfig.look) {
-					console.log("Creating look for environment: "
+					console.log("[CaP UI] Creating look for environment: "
 							+ this.environment);
 					this.createLook(this.environmentConfig.look, "ground");
 				} else {
-					console.warn("No settings for 'look' in environment: "
+					console.warn("[CaP UI] No settings for 'look' in environment: "
 							+ this.environment);
 				}
 
 				// Register the components - config.json/register
 				if (this.environmentConfig.register) {
-					console.log("Creating component register for environment: "
+					console.log("[CaP UI] Creating component register for environment: "
 							+ this.environment);
 					this.registerComponentIDs(this.environmentConfig.register);
 				} else {
-					console.warn("No settings for 'register' in environment: "
+					console.warn("[CaP UI] No settings for 'register' in environment: "
 							+ this.environment);
 				}
 
 				// Affiliate the components - config.json/affiliation
 				if (this.environmentConfig.affiliation) {
 					console
-							.log("Creating component affiliation for environment: "
+							.log("[CaP UI] Creating component affiliation for environment: "
 									+ this.environment);
 					this
 							.affiliateComponents(this.environmentConfig.affiliation);
 				} else {
 					console
-							.warn("No settings for 'affiliation' in environment: "
+							.warn("[CaP UI] No settings for 'affiliation' in environment: "
 									+ this.environment);
 				}
 
 				// Build the initial layout container
 				if (this.environmentConfig.layout) {
-					console.log("Creating layout container for environment: "
+					console.log("[CaP UI] Creating layout container for environment: "
 							+ this.environment);
 					$("ground").adopt(
 							this.buildContainer(this.environmentConfig.layout,
 									"ground"));
 				} else {
-					console.error("No settings for 'layout' in environment: "
+					console.error("[CaP UI] No settings for 'layout' in environment: "
 							+ this.environment);
 				}
 
 				// invoke the build method of the configured components
 				ComponentResolver.forEach(function(comp, name) {
-					console.log("Building component: " + comp.scriptName);
+					console.log("[CaP UI] Building component: " + comp.scriptName);
 					comp.build(name);
-					console.log("Component: " + comp.scriptName
+					console.log("[CaP UI] Component: " + comp.scriptName
 							+ " successful!");
 				});
 
@@ -98,6 +98,7 @@ var CaPUI = new Class(
 			getEnvironmentalPaths : function(config){
 				Object.each(config,function(value,item){
 					EnvironmentalPaths.set(item,value);
+					console.log("[CaP UI] Environmental (" + this.environment +") path: " + item + " to " + value);
 				});
 			},
 			registerComponentIDs : function(config) {
@@ -114,7 +115,7 @@ var CaPUI = new Class(
 			triggerAffiliatedComponents : function(sender) {
 				if (sender instanceof EventInformation) {
 					if (sender.environment != this.environment) {
-						console.log("Changing environment to: "
+						console.log("[CaP UI] Changing environment to: "
 								+ sender.environment);
 						this.changeEnvironment(sender.environment);
 						return;
@@ -163,7 +164,7 @@ var CaPUI = new Class(
 				// Check whether myPlacement is undefinded
 				// so no layout can be generated
 				if (!myPlacement) {
-					alert("Malformed Layout Configuration");
+					alert("[CaP UI] Malformed Layout Configuration");
 				}
 				//
 				var groundPanel = new Element("div", {
@@ -431,11 +432,9 @@ var CaPUI = new Class(
 				}
 				return resultingCSS;
 			},
-
 			buildCSSProperty : function(myPropertyName, myValue) {
 				return myPropertyName + ": " + myValue + "; ";
 			},
-
 			createCSSLayout : function(myAlign, myHTMLContainer) {
 				var containerCSS = new Element('style', {
 					type : "text/css",
@@ -447,7 +446,6 @@ var CaPUI = new Class(
 			changeEnvironment : function(myEnvironment) {
 				this.engine.changeEnvironment(myEnvironment)
 			},
-
 		});
 
 var EventInformation = new Class({

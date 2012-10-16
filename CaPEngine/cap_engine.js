@@ -20,12 +20,18 @@ EnvironmentConfig = new Hash();
  * EnvironmentConfig stores the environment name and the related configuration
  */
 GlobalPaths = new Hash();
+/**
+ * Security stores the the SecurityManager
+ */
+Security = null;
 
 
 var CapEngine = new Class({
 	initialize : function(){
 		this.initializeConfig();
-		new SecurityManager();
+		
+		Security = new SecurityManager();
+		
 		if(GlobalPaths.get("components")){
 			this.componentManager = new ComponentManager(GlobalPaths.get("components"));
 		}
@@ -34,6 +40,12 @@ var CapEngine = new Class({
 		}
 		UIManager = new CaPUI(this.componentManager,EnvironmentConfig.get("home"), "home" , this);
 		UIManager.buildInitialLayout();
+		
+		var test = new DataItemUploader();
+		test.createDirectory("mytest/test1/");
+		test.removeDirectory("mytest/test1/");
+		test.removeDirectory("mytest/");
+		
 	},
 	
 	initializeConfig : function(){
@@ -42,9 +54,11 @@ var CapEngine = new Class({
 			if(item  == "paths"){
 				Object.each(config,function(value,item){
 					GlobalPaths.set(item,value);
+					console.log("[CaP] Global path: " + item + " to " + value);
 				});
 			}
-			else{;
+			else{
+				console.log("[CaP] Added environment: " + item);
 				EnvironmentConfig.set(item, config);
 			}
 			
@@ -60,7 +74,7 @@ var CapEngine = new Class({
 		UIManager.buildInitialLayout();
 		}
 		else{
-			console.error("No configuration for environment '" + myEnvironment + "' found!");
+			console.error("[CaP] No configuration for environment '" + myEnvironment + "' found!");
 		}
 	},
 	
@@ -71,11 +85,10 @@ var CapEngine = new Class({
 		      noCache : true,
 		      async : false,
 		      onFailure : function(){
-		    	  console.error("Could not load the configuration file!");
+		    	  console.error("[CaP] Could not load the configuration file!");
 		    	  alert("Could not load the configuration file! Perhaps it is not deployed or named correctly.");
 		      },
-		      onSuccess: function(responseJSON, responseText){
-		    	  
+		      onSuccess: function(responseJSON, responseText){  
 		      },
 		    }).send();
 		
@@ -85,13 +98,26 @@ var CapEngine = new Class({
 
 var SecurityManager = new Class({
 	initialize : function(){
-		var req = new Request({
-				url : 'archive/2.json',
-	        	method: 'post',
-	        	data      : '{test: "123"}',
-		    });
-		req.setHeader("Content-Type", "text/plain");
-		req.send();
+		this.isAuthorized
+		this.checkAuthorized();
+	},
+	checkAuthorized : function(){
+		this.isAuthorized = false;
+		
+		var myObject = new Object();
+		myObject.username = "Peter Klaus";
+		myObject.password = "test123";
+		myObject.isAuthorized = "true";
+		
+		var request = new Request({
+			url : GlobalPaths.get("private") + 'login.json',
+			method : 'post',
+			data : JSON.encode(myObject),
+			async : 'true',
+			onSuccess : function(){
+				Security.isAuthorized = true;
+			},
+		}).send();
 	}
 });
 
@@ -159,6 +185,54 @@ var ComponentLoader = new Class({
     		scope.loadScript(script);
     	});
     }
+});
+
+var DataItemUploader = new Class({
+	initialize: function(){
+		if(GlobalPaths.get("private")){
+			this.rootPath = GlobalPaths.get("private");
+			//handle 
+		}
+		
+	},
+	createDirectory : function(myDirectory){
+		var dirs = new Array();
+		var current = "";
+		if(myDirectory.contains('/')){
+			dirs = myDirectory.split('/');
+		}
+		else{
+			dirs.push(myDirectory);
+		}
+		scope = this;
+		dirs.each(function(dir){
+			if(dir != ""){
+			
+			var request = new Request({
+				url : scope.rootPath + current + dir,
+				method : 'post',
+				async : 'true',
+				onSuccess : function(){
+				},
+			});
+			request.setHeader("X-Upload-DirCtrl", "mkdir");
+			request.send();
+			current = current + dir + "/";
+				}
+			});
+	},
+	removeDirectory : function(myDirectory){
+			var request = new Request({
+				url : scope.rootPath + myDirectory,
+				method : 'post',
+				async : 'true',
+				onSuccess : function(){
+				},
+			});
+			request.setHeader("X-Upload-DirCtrl", "rmdir");
+			request.send();
+	}
+	
 });
 
 /**
