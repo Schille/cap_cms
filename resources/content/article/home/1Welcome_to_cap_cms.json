@@ -7,6 +7,10 @@
 	},
 	en : {
 		title : "The CaP CMS",
-		text : "Welcome to <b>CaP CMS</b> 1st",
+		text : "Welcome to <b>CaP CMS</b> 1st we need some more text here" +
+		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
+		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
+		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
+		"Welcome to <b>CaP CMS</b> 1st we need some more text here",
 	},
 }

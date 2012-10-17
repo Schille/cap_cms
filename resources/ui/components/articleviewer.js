@@ -1,4 +1,4 @@
-var Contentviewer = new Class(
+var Articleviewer = new Class(
 		{
 			initialize : function() {
 				this.dataItemLoader = new DataItemLoader(
@@ -12,13 +12,11 @@ var Contentviewer = new Class(
 				this.article_labels = new Hash();
 			},
 			
-	
-			
-			
 			addLabel : function (index) {
 				//alert(this.allDocs[index]);
 				var htmltext = this.article_labels.get(this.allDocs[index]);
 				scope = this;
+				var origincolor = '#2F3666';
 				var labelborder = new Element('div', {
 					id : "ContentViewerLabel",
 					
@@ -33,9 +31,22 @@ var Contentviewer = new Class(
 					
 				});
 				
+				innercomment.setStyle('border','2px solid #2F3666');
+				
 				var specific_comment = new Element('a', {
-					html: 'Kommentare',
+					html: 'Kommentare v',
 				});
+				
+				var bottomline = new Element('hr');
+				bottomline.setStyles({
+					'color' : origincolor,
+					'background' : origincolor,
+					'height' : '3px',
+					
+				});
+				bottomline.setStyle('margin','-1px');
+				
+				labelborder.adopt(bottomline);
 				
 				if(htmltext != null) {					
 					htmltext.each(function(item, ind) {
@@ -76,14 +87,43 @@ var Contentviewer = new Class(
 				
 				var original_color2 = specific_comment.getStyle('color');
 				
-				innercomment.setStyle('float','right');
+				innercomment.setStyle('float','left');
 				
-				
+				var state = false;
 				specific_comment.setStyle('cursor','pointer');
 				var morph = new Fx.Morph(specific_comment,{ 'duration':'300', link:'cancel' });
+				
+				var anydiv = new Element ('div', {
+					html : 'moin',
+					id : 'Comments',
+					style: 'opacity : 0;'
+				
+				});
+				
 				specific_comment.addEvents({
 				'click' : function() { 
-					//scope.performLabelAction(this.text);
+					
+					if(state) {state = false;
+					anydiv.morph({
+						opacity : 0,
+						height: 0,
+						
+						});
+					}
+					
+					
+					else {state = true;
+					if(!this.getParent().getParent().contains(anydiv)) {
+				
+					this.getParent().getParent().adopt(anydiv);
+					anydiv.morph({
+						 opacity : 1,
+						height: 100,});
+					}
+					else {anydiv.morph({opacity : 1, height: 100,
+						});}
+					
+					}
 					},
 				'mouseenter' : function() { morph.start({ 'color':'#ff8c00', 'text-decoration' : 'underline' });},
 			    'mouseleave' : function() { morph.start({ 'color': original_color2, 'text-decoration' : 'none' }); }
@@ -93,42 +133,45 @@ var Contentviewer = new Class(
 				
 				labelborder.setStyle('margin-bottom', '30px');
 				labelborder.setStyles({
-					'-webkit-border-bottom-right-radius': '8px',
-					'-webkit-border-bottom-left-radius': '8px',
-					'-moz-border-radius-bottomright': '8px',
-					'-moz-border-radius-bottomleft': '8px',
-					'border-bottom-right-radius': '8px',
-					'border-bottom-left-radius': '8px',});
-				labelborder.setStyle('height','25px');
-				labelborder.setStyle('background','-moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(0,153,204,0.3) 38%, rgba(0,116,204,0.65) 83%, rgba(0,102,204,0.65) 100%)');
+					'-webkit-border-top-right-radius': '8px',
+					'-webkit-border-top-left-radius': '8px',
+					'-moz-border-radius-topright': '8px',
+					'-moz-border-radius-topleft': '8px',
+					'border-top-right-radius': '8px',
+					'border-top-left-radius': '8px',});
+				//labelborder.setStyle('height','25px');
+				//labelborder.setStyle('background','-moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(0,153,204,0.3) 38%, rgba(0,116,204,0.65) 83%, rgba(0,102,204,0.65) 100%)');
 				//innerlabel.setStyle('padding-top', '10px');
-				innerlabel.setStyle('padding','10px 10px 0');
+				innerlabel.setStyle('padding','3px 5px');
 				innerlabel.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				innerlabel.setStyle('font-style','italic');
+				//innerlabel.setStyle('font-style','italic');
 				innerlabel.setStyle('font-size','12px');
 				innerlabel.setStyles({
-				'-webkit-border-bottom-right-radius': '4px',
-				'-webkit-border-bottom-left-radius': '4px',
-				'-moz-border-radius-bottomright': '4px',
-				'-moz-border-radius-bottomleft': '4px',
-				'border-bottom-right-radius': '4px',
-				'border-bottom-left-radius': '4px',});
+				'-webkit-border-top-right-radius': '4px',
+				'-webkit-border-top-left-radius': '4px',
+				'-moz-border-radius-topright': '4px',
+				'-moz-border-radius-topmleft': '4px',
+				'border-top-right-radius': '4px',
+				'border-top-left-radius': '4px',
+				'border':'2px solid #2F3666',
+				'float':'left',});
 				innerlabel.setStyle('background-color','#FFFFFF');
-				innerlabel.setStyle('margin-left', '20px');
+				innerlabel.setStyle('margin-top', '-26px');
 				
-				innercomment.setStyle('padding','10px 10px 0');
+				//innercomment.setStyle('padding','10px 10px 0');
 				innercomment.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
 				innercomment.setStyle('font-size','12px');
 				innercomment.setStyles({
-				'-webkit-border-bottom-right-radius': '4px',
-				'-webkit-border-bottom-left-radius': '4px',
-				'-moz-border-radius-bottomright': '4px',
-				'-moz-border-radius-bottomleft': '4px',
-				'border-bottom-right-radius': '4px',
-				'border-bottom-left-radius': '4px',});
+				'-webkit-border-top-right-radius': '4px',
+				'-webkit-border-top-left-radius': '4px',
+				'-moz-border-radius-topright': '4px',
+				'-moz-border-radius-topleft': '4px',
+				'border-top-right-radius': '4px',
+				'border-top-left-radius': '4px',});
+				innercomment.setStyle('padding','3px 5px');
 				innercomment.setStyle('background-color','#FFFFFF');
-				innercomment.setStyle('margin-right', '20px');
-				innercomment.setStyle('margin-top', '-10px');
+				innercomment.setStyle('margin-left', '20px');
+				innercomment.setStyle('margin-top', '-26px');
 				
 				
 				
@@ -146,12 +189,31 @@ var Contentviewer = new Class(
 				 * This is the title, getting the content from the title tag of the 
 				 * json document
 				  */
+				
 				var title = new Element('div', {
 					id : "ContentViewerHeadline",
 					html : doc1.en.title,
 				});
+				
+				var origincolor = '#2F3666';
+				
+				var hrline = new Element('hr', {
+				});
+				title.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
+				title.setStyle('font-weight','bold');
+				title.setStyle('color',origincolor);
+				hrline.setStyles({
+					'color' : origincolor,
+					'background' : origincolor,
+					'height' : '3px',
+					
+				});
+				
+				title.adopt(hrline);
+				
 				title.setStyle("margin", "5px");
 				title.setStyle("font-size", "xx-large");
+				
 
 				// The infoboarder contains information about the author, date etc..
 				var infoborder = new Element('div', {
@@ -165,24 +227,24 @@ var Contentviewer = new Class(
 				innerinfo.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
 				innerinfo.setStyle('font-size','12px');
 				innerinfo.setStyles({
-				'-webkit-border-top-right-radius': '4px',
-				'-webkit-border-top-left-radius': '4px',
-				'-moz-border-radius-topright': '4px',
-				'-moz-border-radius-topleft': '4px',
-				'border-top-right-radius': '4px',
-				'border-top-left-radius': '4px',});
+				'-webkit-border-bottom-right-radius': '4px',
+				'-webkit-border-bottom-left-radius': '4px',
+				'-moz-border-radius-bottomright': '4px',
+				'-moz-border-radius-bottomleft': '4px',
+				'border-bottom-right-radius': '4px',
+				'border-bottom-left-radius': '4px',
+				'margin-top':'-35px',});
 				innerinfo.setStyle('background-color','#FFFFFF');
-				innerinfo.setStyle('margin-left', '20px');
+				//innerinfo.setStyle('margin-left', '20px');
+				//innerinfo.setStyle('border','2px solid '+origincolor);
 				// setting some css here
-				infoborder.setStyle("background-image",
-						"-moz-linear-gradient(top, rgba(0,102,204,0.65) 0%,   rgba(0,116,204,0.65) 62%, rgba(255,255,255,0) 100%)");
-				infoborder.setStyle("height", "35px");
+				infoborder.setStyle("height", "10px");
 				infoborder.setStyle("margin", "5px");
 				infoborder.setStyle('position','relative');
-				innerinfo.setStyle('position','absolute');
+				//innerinfo.setStyle('position','absolute');
 				innerinfo.setStyle('padding','8px 10px 0');
+				innerinfo.setStyle('float','right');
 			
-				innerinfo.setStyle('bottom','3px');
 				infoborder.setStyles({
 					'-webkit-border-top-right-radius': '8px',
 					'-webkit-border-top-left-radius': '8px',
@@ -194,7 +256,7 @@ var Contentviewer = new Class(
 				
 				var date = new Element('a', {
 					id : "ContentViewerInfoborderDate",
-					html : doc1.date,
+					html : ', '+ doc1.date,
 					
 				});
 				date.setStyle('margin-left', '5px');
@@ -205,14 +267,15 @@ var Contentviewer = new Class(
 				
 				});
 				author.setStyle("font-size", "small");
-				author.setStyle('margin-left', '5px');
+				
 				author.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
 			
 				date.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
 				
 				// adopt the span-elements to the infoborder-div
-				innerinfo.adopt(date);
+				
 				innerinfo.adopt(author);
+				innerinfo.adopt(date);
 				infoborder.adopt(innerinfo);
 
 				// textground defines the area of the actual article content
@@ -221,6 +284,7 @@ var Contentviewer = new Class(
 					id : "ContentViewerTextGround",
 					html : doc1.en.text,
 				});
+				textground.setStyle('font-family', 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
 				textground.setStyle("margin", "5px");
 				textground.setStyle("height", "400px");
 
@@ -428,6 +492,6 @@ Com = new Class({
 	initialize : function() {
 	},
 	createInstance : function() {
-		return new Contentviewer();
+		return new Articleviewer();
 	},
 });
