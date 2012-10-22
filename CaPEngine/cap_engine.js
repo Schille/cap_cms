@@ -30,7 +30,8 @@ var CapEngine = new Class({
 	initialize : function(){
 		this.initializeConfig();
 		
-		Security = new SecurityManager();
+		
+		var sec  = new SecurityManager();
 		
 		if(GlobalPaths.get("components")){
 			this.componentManager = new ComponentManager(GlobalPaths.get("components"));
@@ -41,10 +42,8 @@ var CapEngine = new Class({
 		UIManager = new CaPUI(this.componentManager,EnvironmentConfig.get("home"), "home" , this);
 		UIManager.buildInitialLayout();
 		
-		var test = new DataItemUploader();
-		test.createDirectory("mytest/test1/");
-		test.removeDirectory("mytest/test1/");
-		test.removeDirectory("mytest/");
+		
+		
 		
 	},
 	
@@ -194,6 +193,16 @@ var DataItemUploader = new Class({
 			//handle 
 		}
 		
+	},
+	uploadDocument : function(myFilename, myJson){
+		var request = new Request({
+			url : GlobalPaths.get("public") + myFilename +'.json',
+			method : 'post',
+			data : myJson,
+			async : 'true',
+			onSuccess : function(){
+			},
+		}).send();
 	},
 	createDirectory : function(myDirectory){
 		var dirs = new Array();
