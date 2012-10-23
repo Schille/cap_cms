@@ -273,7 +273,10 @@ var DataItemLoader = new Class({
 				documents.push(component.name);
 			}
 		});
-    	return documents;
+		
+		
+		documents.sort(arraySort);
+		return documents;
     },
     /**
      * Fetches a DataItem(JSON) document.
@@ -343,3 +346,7 @@ var Component = new Class({
     	return this.instance;
     }
 });
+
+ arraySort = function (a,b) {
+	return a.toInt() - b.toInt();
+ };

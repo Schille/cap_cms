@@ -39,6 +39,23 @@ var Articleviewer = new Class(
 					html : 'Kommentare:<br><br>'
 
 				});
+				
+				var authorEle = function (dataItem) {
+					var comment_author = new Element('div', {
+						html : 'by ' + dataItem.name + ', ' + dataItem.date,
+					});
+					return comment_author;
+				};
+				
+				var contentEle = function(dataItem) {
+					var comment_box = new Element(
+							'div',
+							{
+								html : dataItem.content,
+							});
+					return comment_box;
+				};
+				
 				comment_container.setStyle('font-size', '20px');
 				comment_container
 						.setStyle('font-family',
@@ -51,15 +68,10 @@ var Articleviewer = new Class(
 				
 				for ( var i = 0; i < allComments.length; i++) {
 					var com1 = commentloader.getDataItem(allComments[i]);
-					var comment_box = new Element(
-							'div',
-							{
-								html : com1.content,
-							});
+					var comment_box = contentEle(com1);
 
-					var comment_author = new Element('div', {
-						html : 'by ' + com1.name + ', ' + com1.date,
-					});
+					var comment_author = authorEle(com1);
+					
 					var comment_triangle = new Element('div');
 					comment_triangle.setStyles({
 						'width' : '0',
@@ -109,7 +121,7 @@ var Articleviewer = new Class(
 
 				}
 				
-				var comment_form = new Element('form', {
+				var comment_form = new Element('div', {
 					action: '',
 					style:'margin-left:35px;'
 				});
@@ -173,10 +185,85 @@ var Articleviewer = new Class(
 				comment_container.adopt(comment_form);
 				
 				comment_submit.addEvent('click', function() {
+					
+					var comment_object = scope.buildCommentObject(comment_name_field, comment_input);
 					uploader.uploadDocument('components/articleviewer/comments/'+
 							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'))+ '/' +
 					allComments.length
-				   , JSON.encode(scope.buildCommentObject(comment_name_field, comment_input)));
+				   , JSON.encode(comment_object));
+					
+					
+					var comment_container_height = comment_container.getHeight();
+					var comment_form_height = comment_form.getHeight();
+					comment_container.morph({
+										height: comment_container_height-comment_form_height,
+										});
+					comment_tip.morph({opacity: 0,});
+					comment_line.morph({opacity: 0,});
+					
+					comment_tip.destroy();
+					comment_line.destroy();
+					
+					var comment_box = contentEle(comment_object);
+
+					var comment_author = authorEle(comment_object);
+					
+					var comment_triangle = new Element('div');
+					comment_triangle.setStyles({
+						'width' : '0',
+						'height' : '0',
+						'border-left' : '2px solid transparent',
+						'border-right' : '13px solid transparent',
+						'border-bottom' : '15px solid #DFE1F0',
+						'margin-left' : '30px',
+						'opacity' : '0',
+					});
+
+					comment_author
+							.setStyle('font-family',
+									'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
+					comment_author.setStyle('font-size', '12px');
+					comment_author.setStyle('opacity', '0');
+
+					comment_box
+							.setStyle('font-family',
+									'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
+					comment_box.setStyle('font-size', '12px');
+					comment_box.setStyle('margin', '0px 20px 20px');
+					comment_box.setStyle('padding', '10px');
+					comment_box.setStyle('background', '#DFE1F0');
+					comment_box.setStyles({
+						'-webkit-radius' : '3px',
+
+						'-moz-radius' : '3px',
+
+						'border-radius' : '3px',
+						
+						'opacity' : '0',
+					});
+
+					if (i % 2 == 1) {
+
+						comment_author.setStyle('text-align', 'right');
+						comment_triangle.setStyles({
+							'border-left' : '13px solid transparent',
+							'border-right' : '2px solid transparent',
+							'border-bottom' : '15px solid #EFF1F9',
+						});
+						comment_box.setStyle('background', '#EFF1F9');
+						comment_triangle.setStyle('margin-left', '690px');
+					}
+
+					comment_container.setStyle('padding', '15px');
+					comment_container.adopt(comment_author);
+					comment_container.adopt(comment_triangle);
+					comment_container.adopt(comment_box);
+					comment_author.morph({opacity : 1,});
+					comment_triangle.morph({opacity : 1,});
+					comment_box.morph({opacity : 1,});
+					
+					comment_form.destroy();
+					
 				});
 				
 				return comment_container;
