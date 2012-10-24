@@ -111,8 +111,12 @@ var Articleviewer = new Class(
 			
 			buildCommentObject : function (name, content) {
 				var comment = new Object();
+				var date = new Date();
+				var month = date.getMonth()+1;
+				month = (month < 10) ? "0"+month : month;
+				
 				comment.name = name.getProperty('value');
-				comment.date = '11.11.2012';
+				comment.date = date.getDate() + '.' + month + '.' + date.getFullYear();
 				comment.content = content.getProperty('value');
 				
 				return  comment;
@@ -269,6 +273,9 @@ var Articleviewer = new Class(
 				comment_submit.addEvent('click', function() {
 					
 					var comment_object = scope.buildCommentObject(comment_name_field, comment_input);
+					uploader.createDirectory('/components/articleviewer/comments/'+
+							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.')))+'/';
+					
 					uploader.uploadDocument('components/articleviewer/comments/'+
 							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'))+ '/' +
 					allComments.length
