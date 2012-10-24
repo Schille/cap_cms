@@ -261,11 +261,29 @@ var DataItemLoader = new Class({
     		header: {"X-JsonIndex": true},
     	      noCache : false,
     	      url: this.dataItemRoot,
-    	      async : false, 
+    	      async : false,
+    	      onFailure: function() {
+    	          var error = "Error " + this.status;
+    	          switch (this.status) {
+    	              case 404:
+    	                  success = false;
+    	              break;
+    	              case 301:
+    	            	  success = false;
+    	              break;
+    	              case 302:
+    	                  error = "Object moved temporarliy (302 redirect)";
+    	              break;
+    	          }
+    	      },
     	    });
     	request.setHeader("X-JsonIndex", true);
     	request.get('json=true');
     	
+    	if(request.status != 200){
+    		console.warn("[CaP] Directory not available!");
+    		return false;
+    	}
 		var json =  JSON.decode(request.response.text).files;
 		
 		json.each(function(component){
