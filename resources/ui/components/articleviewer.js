@@ -10,7 +10,104 @@ var Articleviewer = new Class(
 				this.language = "en";
 				this.labels = new Hash();
 				this.article_labels = new Hash();
+				
 			},
+			
+			getCSS : function(cssobject) {
+				switch (cssobject) {
+					case "labelborder" : return {
+						'-webkit-border-top-right-radius' : '8px',
+						'-webkit-border-top-left-radius' : '8px',
+						'-moz-border-radius-topright' : '8px',
+						'-moz-border-radius-topleft' : '8px',
+						'border-top-right-radius' : '8px',
+						'border-top-left-radius' : '8px',
+						'margin-bottom': '30px',
+					};
+					case "label_in" : return {
+						'cursor' : 'pointer',
+						'-webkit-border-top-right-radius' : '4px',
+						'-webkit-border-top-left-radius' : '4px',
+						'-moz-border-radius-topright' : '4px',
+						'-moz-border-radius-topmleft' : '4px',
+						'border-top-right-radius' : '4px',
+						'border-top-left-radius' : '4px',
+						'border' : '2px solid #2F3666',
+						'float' : 'left',
+						'padding' : '3px 5px',
+						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+						'font-size' : '12px',
+						'background-color' : '#FFFFFF',
+						'margin-top' : '-27px',
+					};
+					case "innerinfo" : return {
+						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+						'font-size' : '12px',
+						'background-color' : '#FFFFFF',
+						'-webkit-border-bottom-right-radius' : '4px',
+						'-webkit-border-bottom-left-radius' : '4px',
+						'-moz-border-radius-bottomright' : '4px',
+						'-moz-border-radius-bottomleft' : '4px',
+						'border-bottom-right-radius' : '4px',
+						'border-bottom-left-radius' : '4px',
+						'margin-top' : '-35px',
+						'padding' : '8px 10px 0',
+						'float' : 'right',
+					};
+					case "infoborder" : return {
+						'height' : '10px',
+						'margin' : '5px',
+						'position' : 'relative',
+						'-webkit-border-top-right-radius' : '8px',
+						'-webkit-border-top-left-radius' : '8px',
+						'-moz-border-radius-topright' : '8px',
+						'-moz-border-radius-topleft' : '8px',
+						'border-top-right-radius' : '8px',
+						'border-top-left-radius' : '8px',
+						'vertical-align' :'bottom',
+					};
+					case "innercomment" : return {
+						'font-size' : '12px',
+						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+						'-webkit-border-top-right-radius' : '4px',
+						'-webkit-border-top-left-radius' : '4px',
+						'-moz-border-radius-topright' : '4px',
+						'-moz-border-radius-topleft' : '4px',
+						'border-top-right-radius' : '4px',
+						'border-top-left-radius' : '4px',
+						'padding' : '3px 5px',
+						'background-color' : '#FFFFFF',
+						'margin-left' : '70px',
+						'margin-top' : '-27px',
+					};
+					case "comment_triangle" : return {
+						'width' : '0',
+						'height' : '0',
+						'border-left' : '2px solid transparent',
+						'border-right' : '13px solid transparent',
+						'border-bottom' : '15px solid #DFE1F0',
+						'margin-left' : '30px',
+					};
+					case "comment_box" : return {
+						
+						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+						'font-size' : '12px',
+						'margin' : '0px 20px 20px',
+						'padding' : '10px',
+						'background' : '#DFE1F0',
+						
+						'-webkit-radius' : '3px',
+						'-moz-radius' : '3px',
+						'border-radius' : '3px',
+					};
+					
+					
+				
+				
+				}
+				
+			},
+			
 			
 			buildCommentObject : function (name, content) {
 				var comment = new Object();
@@ -34,7 +131,7 @@ var Articleviewer = new Class(
 
 			addComments : function(index) {
 				scope = this;
-				var doc1 = this.dataItemLoader.getDataItem(this.allDocs[index]);
+				
 				var comment_container = new Element('div', {
 					html : 'Kommentare:<br><br>'
 
@@ -56,15 +153,19 @@ var Articleviewer = new Class(
 					return comment_box;
 				};
 				
-				comment_container.setStyle('font-size', '20px');
-				comment_container
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
+				comment_container.setStyles({
+						'font-size': '20px',
+							'font-family':
+							'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',							
+					});
+
 				var commentloader = new DataItemLoader("private/components/articleviewer/comments/"+this.allDocs[index].substring(0,this.allDocs[index].indexOf('.'))+'/');
 				
 				var allComments = commentloader.getAllDataItems();
-				
-				
+				if (allComments == false){
+					console.log('[Articleviewer] Folder for this request doesn\'t exist');
+				}
+				else {
 				
 				for ( var i = 0; i < allComments.length; i++) {
 					var com1 = commentloader.getDataItem(allComments[i]);
@@ -73,34 +174,14 @@ var Articleviewer = new Class(
 					var comment_author = authorEle(com1);
 					
 					var comment_triangle = new Element('div');
-					comment_triangle.setStyles({
-						'width' : '0',
-						'height' : '0',
-						'border-left' : '2px solid transparent',
-						'border-right' : '13px solid transparent',
-						'border-bottom' : '15px solid #DFE1F0',
-						'margin-left' : '30px',
-					});
+					comment_triangle.setStyles(this.getCSS("comment_triangle"));
 
 					comment_author
-							.setStyle('font-family',
-									'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-					comment_author.setStyle('font-size', '12px');
+							.setStyles({'font-family' :
+									'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+									'font-size': '12px'});
 
-					comment_box
-							.setStyle('font-family',
-									'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-					comment_box.setStyle('font-size', '12px');
-					comment_box.setStyle('margin', '0px 20px 20px');
-					comment_box.setStyle('padding', '10px');
-					comment_box.setStyle('background', '#DFE1F0');
-					comment_box.setStyles({
-						'-webkit-radius' : '3px',
-
-						'-moz-radius' : '3px',
-
-						'border-radius' : '3px',
-					});
+					comment_box.setStyles(this.getCSS("comment_box"));
 
 					if (i % 2 == 1) {
 
@@ -113,6 +194,7 @@ var Articleviewer = new Class(
 						comment_box.setStyle('background', '#EFF1F9');
 						comment_triangle.setStyle('margin-left', '690px');
 					}
+					
 
 					comment_container.setStyle('padding', '15px');
 					comment_container.adopt(comment_author);
@@ -120,7 +202,7 @@ var Articleviewer = new Class(
 					comment_container.adopt(comment_box);
 
 				}
-				
+				}
 				var comment_form = new Element('div', {
 					action: '',
 					style:'margin-left:35px;'
@@ -191,6 +273,7 @@ var Articleviewer = new Class(
 							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'))+ '/' +
 					allComments.length
 				   , JSON.encode(comment_object));
+					
 					
 					
 					var comment_container_height = comment_container.getHeight();
@@ -322,14 +405,17 @@ var Articleviewer = new Class(
 					'border-top-right-radius' : '4px',
 					'border-top-left-radius' : '4px',
 					'float' : 'right',
+					'padding' : '1px',
+					'margin-top' : '-33px',
 				});
-
-				twitter.setStyle('padding', '1px');
-				twitter.setStyle('margin-top', '-33px');
-				twitter.setStyle('float', 'right');
-				twitter.setStyle('margin-right', '75px');
-				social_media.setStyle('padding', '1px');
-				social_media.setStyle('margin-top', '-33px');
+				
+				twitter.setStyles({
+					'padding' : '1px',
+					'margin-top' : '-33px',
+					'float' : 'right',
+					'margin-right' : '75px',
+				});
+				
 
 				var bottomline = new Element('hr');
 				bottomline.setStyles({
@@ -349,11 +435,15 @@ var Articleviewer = new Class(
 							html : item,
 						});
 						var original_color = specific_label.getStyle('color');
-						specific_label.setStyle('margin-left', '7px');
-						specific_label.setStyle('cursor', 'pointer');
-						specific_label.setStyle('padding', '3px');
-
-						specific_label.setStyle('border', '1px solid #2F3666');
+						
+						specific_label.setStyles({
+							'margin-left' : '7px',
+							'cursor' : 'pointer',
+							'padding' : '3px',
+							'border' : '1px solid #2F3666',
+							});
+						
+						
 
 						var morph = new Fx.Morph(specific_label, {
 							'duration' : '300',
@@ -504,62 +594,26 @@ var Articleviewer = new Class(
 
 				});
 
-				label_in.setStyle('cursor', 'pointer');
+				
 
-				innerlabel
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				innerlabel.setStyle('font-size', '12px');
-				labelborder.setStyle('margin-bottom', '30px');
-				labelborder.setStyles({
-					'-webkit-border-top-right-radius' : '8px',
-					'-webkit-border-top-left-radius' : '8px',
-					'-moz-border-radius-topright' : '8px',
-					'-moz-border-radius-topleft' : '8px',
-					'border-top-right-radius' : '8px',
-					'border-top-left-radius' : '8px',
+				innerlabel.setStyles({
+					'font-family': 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+					'font-size' : '12px',
 				});
-				// labelborder.setStyle('height','25px');
-				// labelborder.setStyle('background','-moz-linear-gradient(top,
-				// rgba(255,255,255,0) 0%, rgba(0,153,204,0.3) 38%,
-				// rgba(0,116,204,0.65) 83%, rgba(0,102,204,0.65) 100%)');
-				// innerlabel.setStyle('padding-top', '10px');
-				label_in.setStyle('padding', '3px 5px');
-				label_in
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				// innerlabel.setStyle('font-style','italic');
-				label_in.setStyle('font-size', '12px');
-				label_in.setStyles({
-					'-webkit-border-top-right-radius' : '4px',
-					'-webkit-border-top-left-radius' : '4px',
-					'-moz-border-radius-topright' : '4px',
-					'-moz-border-radius-topmleft' : '4px',
-					'border-top-right-radius' : '4px',
-					'border-top-left-radius' : '4px',
-					'border' : '2px solid #2F3666',
-					'float' : 'left',
-				});
-				label_in.setStyle('background-color', '#FFFFFF');
-				label_in.setStyle('margin-top', '-27px');
-
-				// innercomment.setStyle('padding','10px 10px 0');
-				innercomment
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				innercomment.setStyle('font-size', '12px');
-				innercomment.setStyles({
-					'-webkit-border-top-right-radius' : '4px',
-					'-webkit-border-top-left-radius' : '4px',
-					'-moz-border-radius-topright' : '4px',
-					'-moz-border-radius-topleft' : '4px',
-					'border-top-right-radius' : '4px',
-					'border-top-left-radius' : '4px',
-				});
-				innercomment.setStyle('padding', '3px 5px');
-				innercomment.setStyle('background-color', '#FFFFFF');
-				innercomment.setStyle('margin-left', '70px');
-				innercomment.setStyle('margin-top', '-27px');
+				
+				
+				
+				labelborder.setStyles(this.getCSS("labelborder"));
+			
+				
+				
+				;
+				label_in.setStyles(this.getCSS("label_in"));
+				
+				
+				
+				innercomment.setStyles(this.getCSS("innercomment"));
+				
 
 				return labelborder;
 
@@ -585,11 +639,17 @@ var Articleviewer = new Class(
 				var origincolor = '#2F3666';
 
 				var hrline = new Element('hr', {});
-				title
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				title.setStyle('font-weight', 'bold');
-				title.setStyle('color', origincolor);
+				
+				title.setStyles({
+					'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+					'font-weight' : 'bold',
+					'color' : origincolor,
+					'margin': '5px',
+					'font-size' : 'xx-large',
+					
+				});
+				
+
 				hrline.setStyles({
 					'color' : origincolor,
 					'background' : origincolor,
@@ -599,8 +659,6 @@ var Articleviewer = new Class(
 
 				title.adopt(hrline);
 
-				title.setStyle("margin", "5px");
-				title.setStyle("font-size", "xx-large");
 
 				// The infoboarder contains information about the author, date
 				// etc..
@@ -612,61 +670,34 @@ var Articleviewer = new Class(
 					id : "ContentViewerInner",
 				});
 
-				innerinfo
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				innerinfo.setStyle('font-size', '12px');
-				innerinfo.setStyles({
-					'-webkit-border-bottom-right-radius' : '4px',
-					'-webkit-border-bottom-left-radius' : '4px',
-					'-moz-border-radius-bottomright' : '4px',
-					'-moz-border-radius-bottomleft' : '4px',
-					'border-bottom-right-radius' : '4px',
-					'border-bottom-left-radius' : '4px',
-					'margin-top' : '-35px',
-				});
-				innerinfo.setStyle('background-color', '#FFFFFF');
-				// innerinfo.setStyle('margin-left', '20px');
-				// innerinfo.setStyle('border','2px solid '+origincolor);
-				// setting some css here
-				infoborder.setStyle("height", "10px");
-				infoborder.setStyle("margin", "5px");
-				infoborder.setStyle('position', 'relative');
-				// innerinfo.setStyle('position','absolute');
-				innerinfo.setStyle('padding', '8px 10px 0');
-				innerinfo.setStyle('float', 'right');
-
-				infoborder.setStyles({
-					'-webkit-border-top-right-radius' : '8px',
-					'-webkit-border-top-left-radius' : '8px',
-					'-moz-border-radius-topright' : '8px',
-					'-moz-border-radius-topleft' : '8px',
-					'border-top-right-radius' : '8px',
-					'border-top-left-radius' : '8px',
-				});
-				infoborder.setStyle("vertical-align", "bottom");
+			
+				innerinfo.setStyles(this.getCSS("innerinfo"));
+				
+				infoborder.setStyles(this.getCSS("infoborder"));
+			
 
 				var date = new Element('a', {
 					id : "ContentViewerInfoborderDate",
 					html : ', ' + doc1.date,
 
 				});
-				date.setStyle('margin-left', '5px');
+				
 
 				var author = new Element('a', {
 					id : "ContentViewerInfoborderAuthor",
 					html : 'by ' + doc1.author,
 
 				});
-				author.setStyle("font-size", "small");
+				
+				
+				author.setStyles({'font-size' : 'small',
+								  'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+								  });
+				date.setStyles({'margin-left' : '5px',
+					  'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+					  });
 
-				author
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-
-				date
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
+				
 
 				// adopt the span-elements to the infoborder-div
 
@@ -680,11 +711,13 @@ var Articleviewer = new Class(
 					id : "ContentViewerTextGround",
 					html : doc1.en.text,
 				});
-				textground
-						.setStyle('font-family',
-								'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif');
-				textground.setStyle("margin", "5px");
-				textground.setStyle("height", "400px");
+				
+				textground.setStyles({
+					'font-family': 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
+					'margin' : '5px',
+					'height' : '400px',
+				});
+				
 
 				// In the end the text-div is built here and all the given
 				// elements
