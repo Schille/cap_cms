@@ -1,0 +1,14 @@
+{
+	name : 'Stein',
+	surname : 'Robert',
+	year : '1992',
+	city : 'Mannheim',
+	country : 'Germany',
+	role : 'Lead Component Design & Development',
+	description : 'Robert is an active contributor to the CaP CMS. When someone comes up' +
+				  ' with an new idea he is responsible to get things going for devolping a ' +
+				  'new component for CaP. Robert raises high hopes in the future of CaP.',
+				  
+	image: 'src/resources/content/images/no_profile_image.gif',
+	
+}

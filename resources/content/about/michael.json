@@ -1,0 +1,14 @@
+{
+	name : 'Schilonka',
+	surname : 'Michael',
+	year : '1990',
+	city : 'Mannheim',
+	country : 'Germany',
+	role : 'Lead Backend Development & Architectural Issues',
+	description : 'Michael came up with the idea for CaP CMS during his study at the DHBW Mannheim. ' +
+				  'Therefore CaP is still in the early stages of development Michael is always busy to ' +
+				  'keep the content-management-system as dynamic as he intended in his first thoughts.',
+				  
+	image: 'src/resources/content/images/no_profile_image.gif',
+
+}

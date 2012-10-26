@@ -614,15 +614,9 @@ var Articleviewer = new Class(
 				
 				labelborder.setStyles(this.getCSS("labelborder"));
 			
-				
-				
-				;
 				label_in.setStyles(this.getCSS("label_in"));
 				
-				
-				
 				innercomment.setStyles(this.getCSS("innercomment"));
-				
 
 				return labelborder;
 
