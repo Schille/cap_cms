@@ -9,6 +9,6 @@
 				  'Therefore CaP is still in the early stages of development Michael is always busy to ' +
 				  'keep the content-management-system as dynamic as he intended in his first thoughts.',
 				  
-	image: 'src/resources/content/images/no_profile_image.gif',
+	image : '',
 
 }

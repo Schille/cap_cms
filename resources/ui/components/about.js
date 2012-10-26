@@ -21,12 +21,18 @@ var About = new Class({
 		
 		this.allDocs.each(function(doc, ind) {
 			
+			console.log('[About] Creating teammember div.')
+			
 			var item = scope.dataItemLoader.getDataItem(doc);
 			
 			var member = new Element('div', {
 			
 			});
 		
+			if(item.image == undefined || item.image == '') {
+				console.log('[About] There is no profile image defined for index' + ind);
+				item.image = 'src/resources/content/images/no_profile_image.gif';
+			}
 			var image = new Element('img', {
 				src : item.image,
 				
@@ -38,10 +44,16 @@ var About = new Class({
 			
 		
 			var name = new Element('h3', {
-				html:  item.surname + ' ' + item.name + ' <br><small>'+item.city+', '+item.country+'</small>',
+				html:  item.surname + ' ' + item.name,
 				style : 'font-family : Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; color: #202442;',
 				
 			});
+			
+			var place = new Element('p', {
+				 html : item.city+', '+item.country,
+				 style : 'font-family : Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; color: #202442;',
+				 
+			})
 			
 			var role = new Element('p', {
 				html : item.role,
@@ -70,6 +82,7 @@ var About = new Class({
 			
 			member.adopt(image);
 			member.adopt(name);
+			member.adopt(place);
 			member.adopt(role);
 			member.adopt(text);
 			
