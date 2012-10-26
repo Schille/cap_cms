@@ -32,7 +32,7 @@ var Articleviewer = new Class(
 						'-moz-border-radius-topmleft' : '4px',
 						'border-top-right-radius' : '4px',
 						'border-top-left-radius' : '4px',
-						'border' : '2px solid #2F3666',
+						'border' : '2px solid #202442',
 						'float' : 'left',
 						'padding' : '3px 5px',
 						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
@@ -134,7 +134,7 @@ var Articleviewer = new Class(
 			},
 
 			addComments : function(index) {
-				scope = this;
+				var scope = this;
 				
 				var comment_container = new Element('div', {
 					html : 'Kommentare:<br><br>'
@@ -244,7 +244,7 @@ var Articleviewer = new Class(
 				
 				var comment_line = new Element('hr', {
 					size: '0px',
-					style : 'border-top:1px dotted #2F3666;margin:10px;',
+					style : 'border-top:1px dotted #202442;margin:10px;',
 				});
 				
 				var comment_tip = new Element('p', {
@@ -273,11 +273,13 @@ var Articleviewer = new Class(
 				comment_submit.addEvent('click', function() {
 					
 					var comment_object = scope.buildCommentObject(comment_name_field, comment_input);
-					uploader.createDirectory('/components/articleviewer/comments/'+
-							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.')))+'/';
 					
+					var path = scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'));
+					uploader.createDirectory('/components/articleviewer/comments/'+
+							path+'/');
+				//	alert(scope.allDocs[index]);
 					uploader.uploadDocument('components/articleviewer/comments/'+
-							scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'))+ '/' +
+							path+ '/' +
 					allComments.length
 				   , JSON.encode(comment_object));
 					
@@ -363,8 +365,8 @@ var Articleviewer = new Class(
 			addLabel : function(index) {
 				// alert(this.allDocs[index]);
 				var htmltext = this.article_labels.get(this.allDocs[index]);
-				scope = this;
-				var origincolor = '#2F3666';
+				var scope = this;
+				var origincolor = '#202442';
 				var labelborder = new Element('div', {
 					id : "ContentViewerLabel",
 
@@ -386,7 +388,7 @@ var Articleviewer = new Class(
 
 				});
 
-				innercomment.setStyle('border', '2px solid #2F3666');
+				innercomment.setStyle('border', '2px solid #202442');
 
 				var specific_comment = new Element('a', {
 					html : 'Kommentare v',
@@ -447,7 +449,7 @@ var Articleviewer = new Class(
 							'margin-left' : '7px',
 							'cursor' : 'pointer',
 							'padding' : '3px',
-							'border' : '1px solid #2F3666',
+							'border' : '1px solid #202442',
 							});
 						
 						
@@ -505,7 +507,7 @@ var Articleviewer = new Class(
 
 				});
 				// anydiv.setStyle('padding-bottom','0px');
-
+				
 				this.expand_comments = function() {
 
 					if (state_com) {
@@ -522,7 +524,7 @@ var Articleviewer = new Class(
 					else {
 						state_com = true;
 						if (!this.getParent().getParent().contains(anydiv)) {
-
+							
 							anydiv = scope.addComments(index);
 							$('ContentViewerText').adopt(anydiv);
 							var original_height = anydiv.getStyle('height');
@@ -643,7 +645,7 @@ var Articleviewer = new Class(
 					html : doc1.en.title,
 				});
 
-				var origincolor = '#2F3666';
+				var origincolor = '#202442';
 
 				var hrline = new Element('hr', {});
 				
@@ -747,6 +749,7 @@ var Articleviewer = new Class(
 
 				this.id = myID;
 				this.container = myContainer;
+				
 				this.index = 0;
 				document.removeEvent('scroll', this.scroller);
 				console.log('Removing scrolling event');
