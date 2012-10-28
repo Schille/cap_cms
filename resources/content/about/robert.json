@@ -9,6 +9,6 @@
 				  ' with an new idea he is responsible to get things going for devolping a ' +
 				  'new component for CaP. Robert raises high hopes in the future of CaP.',
 				  
-	image: 'src/resources/content/images/no_profile_image.gif',
+	image: '',
 	
 }

@@ -38,7 +38,7 @@ var About = new Class({
 				
 			});
 			image.setStyles({
-				'padding' : '5px',
+				'padding' : '3px',
 				'border' : '1px solid #202442',
 			});
 			
@@ -100,6 +100,7 @@ var About = new Class({
 
 	
 	performAction : function(){
+		this.build();
 		alert("Successful Loaded: " + this.id);
 	}
     

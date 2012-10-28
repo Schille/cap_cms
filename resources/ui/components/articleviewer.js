@@ -242,6 +242,48 @@ var Articleviewer = new Class(
 					style: 'resize: none; margin-top:5px; margin-left: 5px;',
 				});
 				
+				comment_input.addEvents( {
+					'keydown' : function(event) {
+						if (comment_input.value.length < 100 || (event.key == 'backspace' || event.shift == true
+								|| event.alt == true || event.key == 'up' || event.key == 'down' || event.key == 'left'
+									|| event.key == 'right' || event.key == 'delete')) {
+							comment_chars_left.setProperty('html', '<br>'
+									+ (100 - comment_input.value.length)
+									+ ' Zeichen übrig');
+							return true;
+						}
+					else {
+						comment_chars_left.setProperty('html', '<br>'
+								+ (100 - comment_input.value.length)
+								+ ' Zeichen übrig');
+						return false;
+						
+					}
+				},
+						'keyup' : function(event) {
+							if (comment_input.value.length < 100 || (event.key == 'backspace' || event.shift == true
+									|| event.alt == true || event.key == 'up' || event.key == 'down' || event.key == 'left'
+										|| event.key == 'right' || event.key == 'delete'))  {
+								comment_chars_left.setProperty('html', '<br>'
+										+ (100 - comment_input.value.length)
+										+ ' Zeichen übrig');
+								return true;
+							}
+						else {
+							comment_chars_left.setProperty('html', '<br>'
+									+ (100 - comment_input.value.length)
+									+ ' Zeichen übrig');
+							return false;
+							
+						}
+						},
+
+					
+					
+						
+				});
+				
+				
 				var comment_line = new Element('hr', {
 					size: '0px',
 					style : 'border-top:1px dotted #202442;margin:10px;',
@@ -250,6 +292,11 @@ var Articleviewer = new Class(
 				var comment_tip = new Element('p', {
 					style: 'font-size: 15px;margin-left:20px;margin-bottom:15px;',
 					html: 'Hinterlasse doch noch einen Kommentar...'
+				});
+				
+				var comment_chars_left = new Element('p', {
+					style: 'font-size: 15px;margin-left:20px;margin-bottom:15px;',
+					html: '<br>' + (100-comment_input.value.length) + ' Zeichen übrig',
 				});
 				
 				var comment_submit = new Element('input',{
@@ -269,6 +316,7 @@ var Articleviewer = new Class(
 				comment_container.adopt(comment_line);
 				comment_container.adopt(comment_tip);
 				comment_container.adopt(comment_form);
+				comment_container.adopt(comment_chars_left);
 				
 				comment_submit.addEvent('click', function() {
 					

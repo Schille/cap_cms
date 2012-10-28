@@ -55,7 +55,7 @@ var Topnavigation = new Class({
 		version.adopt(engineVersion);
 		version.adopt(uiVersion);
 		
-		inner.adopt(version);
+//		inner.adopt(version);
 
 		var section  = new Element('div',{
 			id : "ground-topnavigation-section",

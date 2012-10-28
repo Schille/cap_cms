@@ -3,5 +3,5 @@
 				"label" : "About Us",
 				"link" : "about.html",
 				"style" : "placeholder",
-				environment : "home"
+				environment : "about"
 }

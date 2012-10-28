@@ -56,7 +56,7 @@ var Topnavigation = new Class({
 		version.adopt(engineVersion);
 		version.adopt(uiVersion);
 		
-		inner.adopt(version);
+		//inner.adopt(version);
 
 		var section  = new Element('div',{
 			id : "ground-topnavigation-section",
@@ -88,11 +88,12 @@ var Topnavigation = new Class({
 		logocontainer.adopt(logo);
 		section.adopt(logocontainer);
 		
-		var sectionmenu  = new Element('ul',{
+		var sectionmenu  = new Element('nobr',{
 			id : "ground-topnavigation-section-menu",
 
 		});
 		
+		var menu = new Element ('nobr');
 		
 		//for ( var i = 0; i <= this.docs.length - 1; i++) {
 			
@@ -143,13 +144,15 @@ var Topnavigation = new Class({
 			
 			
 			
+			navBarItemLink.setStyle('margin-top','60px');
 			
-			navBarItemLink.setStyle("margin-top", "60px");
+			//navBarItemLink.setStyle("margin-bottom", "40px");
 			navBarItemLink.setStyle("line-height", "25px");
 			
 			if(ind != scope.docs.length - 1){
 				navBarItemLink.setStyle("border-right", "1px solid rgb(99,99,99)");
 			}
+			
 			
 			navBarItemLink.addEvent("click",function(){
 				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, $(this).getAttribute('environment'), $(this).id, "changePage"));
@@ -157,10 +160,11 @@ var Topnavigation = new Class({
 
 
 		//	navBarItemBullet.adopt(navBarItemLink);
+			
 			sectionmenu.adopt(navBarItemLink);
 			
 		});
-		
+			
 		section.adopt(sectionmenu);
 		inner.adopt(section);
 		
