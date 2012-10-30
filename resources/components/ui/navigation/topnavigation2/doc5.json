@@ -1,0 +1,7 @@
+{
+				"name" : "impressum",
+				"label" : "Impressum",
+				"link" : "index.html",
+				"style" : "placeholder",
+				environment : "impressum"
+}

@@ -1,0 +1,7 @@
+{
+				"name" : "about",
+				"label" : "About Us",
+				"link" : "about.html",
+				"style" : "placeholder",
+				environment : "about"
+}
