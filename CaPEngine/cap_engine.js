@@ -67,6 +67,7 @@ var CapEngine = new Class({
 	changeEnvironment : function(myEnvironment){
 		if(EnvironmentConfig.get(myEnvironment) != undefined){
 		$('ground').destroy();
+		document.removeEvents();
 		var ground = new Element('div',{ id:'ground'});
 		$('CaP').adopt(ground);
 		UIManager = new CaPUI(this.componentManager, EnvironmentConfig.get(myEnvironment),myEnvironment, this);

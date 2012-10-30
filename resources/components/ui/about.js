@@ -13,6 +13,16 @@ var About = new Class({
 		scope = this;
 		this.container = myContainer;
 		
+		
+if(EnvironmentalPaths.get(myID)){
+			
+			this.dataItemLoader = new DataItemLoader(EnvironmentalPaths.get(this.id));
+			
+			
+		}else{
+			this.dataItemLoader = new DataItemLoader("src/resources/content/about/");
+		}
+		
 		this.allDocs = this.dataItemLoader.getAllDataItems();
 		
 		var ground = new Element ('div', {
@@ -28,15 +38,30 @@ var About = new Class({
 			var member = new Element('div', {
 			
 			});
+			
+			var image = new Element('img', {
+				
+				
+			});
 		
 			if(item.image == undefined || item.image == '') {
 				console.log('[About] There is no profile image defined for index' + ind);
-				item.image = 'src/resources/content/images/no_profile_image.gif';
-			}
-			var image = new Element('img', {
-				src : item.image,
+				item.image = item.image = EnvironmentalPaths.get(scope.id)+'images/no_profile_image.gif';
+				if (ind % 2 == 0) {
+					image.setStyles({
+						'-moz-transform': 'scaleX(-1)',
+						'-o-transform': 'scaleX(-1)',
+			        	'-webkit-transform': 'scaleX(-1)',
+			        	'transform': 'scaleX(-1)',
+			        	'filter': 'FlipH',
+			        	'-ms-filter': "FlipH",
+					});
+				}
 				
-			});
+			}
+			
+			image.setProperty('src', item.image);
+			
 			image.setStyles({
 				'padding' : '3px',
 				'border' : '1px solid #202442',
@@ -66,7 +91,7 @@ var About = new Class({
 			});
 			
 			member.setStyles({
-				'width' : '400px',
+				'width' : '500px',
 				'padding' : '20px',
 			});
 			image.setStyles({
@@ -78,6 +103,10 @@ var About = new Class({
 			if (ind % 2 == 1) {
 				image.setStyle('float','right');
 				member.setStyle('float','right');
+			}
+			else {
+				image.setStyle('float','left');
+				member.setStyle('float','left');
 			}
 			
 			member.adopt(image);

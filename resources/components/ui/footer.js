@@ -13,18 +13,18 @@ var Footer = new Class({
 		
 	
 		
-		
-		if(EnvironmentalPaths.get(myID)){
-			this.dataItemLoader = new DataItemLoader(EnvironmentalPaths.get(this.id));
-			
-		}else{
-			this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
-		}
+//		
+//		if(EnvironmentalPaths.get(myID)){
+//			this.dataItemLoader = new DataItemLoader(EnvironmentalPaths.get(this.id));
+//			
+//		}else{
+//			this.dataItemLoader = new DataItemLoader("src/resources/ui/navigation/");
+//		}
 		
 		var scope = this;
-		this.dataItemLoader.getAllDataItems().forEach(function(dataItem){
-			scope.docs.push(scope.dataItemLoader.getDataItem(dataItem));
-		});
+//		this.dataItemLoader.getAllDataItems().forEach(function(dataItem){
+//			scope.docs.push(scope.dataItemLoader.getDataItem(dataItem));
+//		});
 		
 		
 		var ground = new Element('div',{
