@@ -122,16 +122,7 @@ var Articleviewer = new Class(
 				return  comment;
 			},
 
-			twitterfun : function(d, s, id) {
-				var js, fjs = d.getElementsByTagName(s)[0];
-				if (!d.getElementById(id)) {
-					js = d.createElement(s);
-					js.id = id;
-					js.src = '//platform.twitter.com/widgets.js';
-					fjs.parentNode.insertBefore(js, fjs);
-				}
-				$(id).destroy();
-			},
+		
 
 			addComments : function(index) {
 				var scope = this;
@@ -323,14 +314,21 @@ var Articleviewer = new Class(
 					var comment_object = scope.buildCommentObject(comment_name_field, comment_input);
 					
 					var path = scope.allDocs[index].substring(0,scope.allDocs[index].indexOf('.'));
-					uploader.createDirectory('/components/articleviewer/comments/'+
+					uploader.createDirectory('components/articleviewer/comments/'+
 							path+'/');
 				//	alert(scope.allDocs[index]);
+					if(allComments.length != null) {
 					uploader.uploadDocument('components/articleviewer/comments/'+
 							path+ '/' +
 					allComments.length
 				   , JSON.encode(comment_object));
-					
+					}
+					else {
+						uploader.uploadDocument('components/articleviewer/comments/'+
+								path+ '/0'
+						
+					   , JSON.encode(comment_object));
+					}
 					
 					
 					var comment_container_height = comment_container.getHeight();
@@ -343,6 +341,7 @@ var Articleviewer = new Class(
 					
 					comment_tip.destroy();
 					comment_line.destroy();
+					comment_chars_left.destroy();
 					
 					var comment_box = contentEle(comment_object);
 
@@ -442,36 +441,11 @@ var Articleviewer = new Class(
 					html : 'Kommentare v',
 				});
 
-				var social_media = new Element(
-						'div',
-						{
-							html : "<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fcapcms.org&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=lucida+grande&amp;height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:110px; height:21px;' allowTransparency='true'></iframe>",
-						});
-
-				var twitter = new Element(
-						'div',
-						{
-							html : "<a href='https://twitter.com/share' class='twitter-share-button' data-text='Look at this article' data-via='CaPCMS' data-lang='de' data-hashtags='CaPCMS'>Twittern</a>",
-						});
-
-				social_media.setStyles({
-					'-webkit-border-top-right-radius' : '4px',
-					'-webkit-border-top-left-radius' : '4px',
-					'-moz-border-radius-topright' : '4px',
-					'-moz-border-radius-topmleft' : '4px',
-					'border-top-right-radius' : '4px',
-					'border-top-left-radius' : '4px',
-					'float' : 'right',
-					'padding' : '1px',
-					'margin-top' : '-33px',
-				});
 				
-				twitter.setStyles({
-					'padding' : '1px',
-					'margin-top' : '-33px',
-					'float' : 'right',
-					'margin-right' : '75px',
-				});
+
+				
+				
+				
 				
 
 				var bottomline = new Element('hr');
@@ -530,8 +504,7 @@ var Articleviewer = new Class(
 
 						labelborder.adopt(innerlabel);
 
-						labelborder.adopt(social_media);
-						labelborder.adopt(twitter);
+				
 
 					});
 				}
@@ -843,7 +816,6 @@ var Articleviewer = new Class(
 					if (this.index < this.allDocs.length - 1) {
 						ground.adopt(this.addDoc(i));
 						this.index = i;
-						this.twitterfun(document, 'script', 'twitter-wjs');
 
 					} else {
 						if (this.index == this.allDocs.length - 1) {
@@ -895,8 +867,7 @@ var Articleviewer = new Class(
 								scope.index++;
 								lastArt = scope.addDoc(scope.index);
 								ground.adopt(lastArt);
-								scope.twitterfun(document, 'script',
-										'twitter-wjs');
+								
 							} else {
 								console
 										.warn('No more articles to load. Breaking and removing reload. - 1');

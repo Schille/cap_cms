@@ -1,4 +1,4 @@
-var Topnavigation = new Class({
+var Footer = new Class({
     initialize: function(){
     	this.dataItemLoader;
     	this.id;
@@ -161,6 +161,6 @@ Com = new Class({
 		
 	},
 	createInstance : function(){
-		return new Topnavigation();
+		return new Footer();
 	},
 });

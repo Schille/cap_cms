@@ -1,0 +1,13 @@
+{
+	name : 'Peter',
+	surname : 'Klaus',
+	year : '1932',
+	city : 'Rotterdam',
+	country : 'Netherlands',
+	role : 'Lead Testing Issues & Name Provider',
+	description : 'Klaus\'s name is always good for testing purposes. We always abuse it :D.' +
+					'He doesn\'t exist at all',
+				  
+	image : '',
+
+}

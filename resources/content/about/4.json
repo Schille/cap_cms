@@ -1,0 +1,14 @@
+{
+	name : 'Sméagol',
+	surname : 'Gollum',
+	year : 'unknown',
+	city : 'Auenland',
+	country : 'Mittelerde',
+	role : 'Lead Comedian & Entertainment of Developers',
+	description : 'Gollum is always there for a good joke. In our offices he always keeps searching for' +
+	'his treasure. One time he tried to bit off Michaels ringfinger. Actually he just wants to rule the world' +
+	' with the power of the ring.' ,
+				  
+	image : '',
+
+}
