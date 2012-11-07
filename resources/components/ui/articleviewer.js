@@ -520,7 +520,7 @@ var Articleviewer = new Class(
 
 				var state_com = false;
 				specific_comment.setStyle('cursor', 'pointer');
-				specific_comment.setStyle('border-bottom', '0px');
+				innercomment.setStyle('border-bottom', '0px');
 				var morph = new Fx.Morph(specific_comment, {
 					'duration' : '300',
 					link : 'cancel'
