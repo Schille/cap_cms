@@ -295,10 +295,8 @@ var Articleviewer = new Class(
 				var comment_submit = new Element('input',{
 					type: 'button',
 					value: 'Senden',
-				
 				});
-				
-				
+					
 				
 				comment_form.adopt(comment_name);
 				comment_form.adopt(comment_name_field);
@@ -423,7 +421,7 @@ var Articleviewer = new Class(
 
 				var label_in = new Element('span', {
 					id : 'ContentViewerInnerLabel',
-					html : 'Labels v'
+					html : 'Labels ▼'
 				});
 
 				var innerlabel = new Element('span', {
@@ -440,7 +438,7 @@ var Articleviewer = new Class(
 				innercomment.setStyle('border', '2px solid #202442');
 
 				var specific_comment = new Element('a', {
-					html : 'Kommentare v',
+					html : 'Kommentare ▼',
 				});
 
 				
@@ -773,7 +771,7 @@ var Articleviewer = new Class(
 				console.log('Removing scrolling event');
 				if (this.allDocs == null) {
 
-					this.allDocs = this.dataItemLoader.getAllDataItems();
+					this.allDocs = this.dataItemLoader.getAllDataItems().reverse();
 				}
 				var scope = this;
 				/*
@@ -943,7 +941,7 @@ var Articleviewer = new Class(
 				this.dataItemLoader = new DataItemLoader(
 						"src/resources/content/article/"
 								+ myEventInformation.actionName + "/");
-				this.allDocs = this.dataItemLoader.getAllDataItems();
+				this.allDocs = this.dataItemLoader.getAllDataItems().reverse();
 				// Building the new contentviewer element.
 				this.build(this.id, this.container);
 

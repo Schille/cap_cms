@@ -1,27 +1,26 @@
 
 {
 label :{ 
-			Schilonka : ["1Welcome_to_cap_cms.json", "2.json", "hello_world.json"],
+			Schilonka : ["2.json","1Welcome_to_cap_cms.json"],
 
-			Stein :  ["new_art.json", "new_art2.json"],
+			Stein :  ["1Welcome_to_cap_cms.json"],
 			
-			welcome : ["1Welcome_to_cap_cms.json"],
+			developer : ["1Welcome_to_cap_cms.json"],
 			
-			"2ndthing" : ["2.json"]
+			CaP : ["1Welcome_to_cap_cms.json"],
+			
+			longboard : ["2.json"],
+			
+			future : ["2.json"],
+			
+			technology : ["2.json"],
 		
-},
+	},
 
 article : {
-			"1Welcome_to_cap_cms.json" : ["Schilonka","welcome"],
+			"1Welcome_to_cap_cms.json" : ["Stein","welcome","CaP","developer"],
 			
-			"2.json" : ["Schilonka","2ndthing"],
+			"2.json" : ["Schilonka","longboard","future","technology"],
 			
-			"hello_world.json" : ["Schilonka"],
-			
-			"new_art.json" : ["Stein"],
-			
-			"new_art2.json" : ["Stein"],
-			
-			"the4.json" : [],
-}
+	},
 }
