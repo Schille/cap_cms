@@ -1,0 +1,30 @@
+{
+    home:{
+        register:{
+            "topnavigation2.js": "nav1",
+            "tree_viewer.js": "cont"
+        },
+        layout:{
+            header:{
+              center : {
+                  component:"nav1",
+              },
+            },
+            left:{
+              component : "cont",
+              width:"300px",  
+            },
+            
+        },
+        paths:{
+            "nav1":"content/navigation/topnavigation2/",
+            "cont" : "../resources/",
+        },
+        
+    }, 
+        
+    paths:{
+        components: "../resources/components/ui/",
+    },
+    
+}

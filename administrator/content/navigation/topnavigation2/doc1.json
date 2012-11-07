@@ -1,0 +1,7 @@
+{
+				"name" : "server",
+				"label" : "Server Content",
+				"link" : "index.html",
+				"style" : "placeholder",
+				environment : "home"
+}

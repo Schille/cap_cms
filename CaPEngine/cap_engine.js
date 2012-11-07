@@ -256,12 +256,14 @@ var DataItemLoader = new Class({
     /**
      * Returns an array of all documents in the given directory.
      */
-    getAllDataItems : function(){
+    getAllDataItems : function(myDir, folder){
+    	if(myDir == undefined)
+    		myDir = "";
     	var documents = new Array(); 
     	var request = new Request({
     		header: {"X-JsonIndex": true},
     	      noCache : false,
-    	      url: this.dataItemRoot,
+    	      url: this.dataItemRoot + myDir,
     	      async : false,
     	      onFailure: function() {
     	          var error = "Error " + this.status;
@@ -287,13 +289,23 @@ var DataItemLoader = new Class({
     	}
 		var json =  JSON.decode(request.response.text).files;
 		
-		json.each(function(component){
-			if(!component.dir){
-				documents.push(component.name);
-			}
-		});
-		
-		
+		if(folder == undefined){
+			json.each(function(component){
+				if(!component.dir){
+					documents.push(component.name);
+				}
+			});
+		}
+		else{
+			var i = 0;
+			json.each(function(component){
+				if(component.dir){
+					if(i != 0)
+						documents.push(component.name);
+					i++;
+				}
+			});
+		}
 		documents.sort(arraySort);
 		return documents;
     },
@@ -312,7 +324,7 @@ var DataItemLoader = new Class({
   	    }).send();
 
   	return JSON.decode(request.response.text);
-    }
+    },
     
 });
 

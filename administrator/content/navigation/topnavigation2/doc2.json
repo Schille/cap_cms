@@ -1,0 +1,7 @@
+{
+				"name" : "admin",
+				"label" : "Administration",
+				"link" : "index.html",
+				"style" : "placeholder",
+				environment : "administration"
+}

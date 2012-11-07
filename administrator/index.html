@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CaP Delivery Page</title>
+<script type="text/javascript" src="../../mootools.js"></script>
+<link rel="stylesheet" media="screen" href="../../deps/mootree/mootree.css">
+<script type="text/javascript" src="../../deps/mootree.js"></script>
+<script type="text/javascript" src="../CaPEngine/cap_engine.js"></script>
+<script type="text/javascript" src="../UIManager/cap_ui.js"></script>
+<script type="text/javascript">
+
+	window.addEvent("domready", function(){ 
+		//$("engineVersion").innerHTML = "Engine: " + engineVersion; 
+		//$("uiVersion").innerHTML = "UI: " + uiVersion; 
+
+		new CapEngine();
+	
+		});	
+</script>
+<style type="text/css">
+
+
+html, body{ 
+ height : 100%;
+
+}
+
+
+
+
+*{
+ margin:0; 
+ padding:0;
+}
+
+#CaP{
+height: inherit;
+}
+
+#ground{
+height: inherit;
+}
+
+</style>
+</head>
+<body>
+<div id='CaP'><div id="ground"></div></div>
+</body>
+</html>
