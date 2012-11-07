@@ -38,6 +38,7 @@ var Articleviewer = new Class(
 						'font-family' : 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
 						'font-size' : '12px',
 						'background-color' : '#FFFFFF',
+						'border-bottom' : '0px',
 						'margin-top' : '-27px',
 					};
 					case "innerinfo" : return {
@@ -64,7 +65,7 @@ var Articleviewer = new Class(
 						'-moz-border-radius-topleft' : '8px',
 						'border-top-right-radius' : '8px',
 						'border-top-left-radius' : '8px',
-						'border-bottom':'0px',
+						'border-bottom' : '0px',
 						'vertical-align' :'bottom',
 					};
 					case "innercomment" : return {
@@ -519,6 +520,7 @@ var Articleviewer = new Class(
 
 				var state_com = false;
 				specific_comment.setStyle('cursor', 'pointer');
+				specific_comment.setStyle('border-bottom', '0px');
 				var morph = new Fx.Morph(specific_comment, {
 					'duration' : '300',
 					link : 'cancel'
