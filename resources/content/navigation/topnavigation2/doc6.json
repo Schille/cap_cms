@@ -1,6 +1,7 @@
 {
-				"name" : "links",
-				"label" : "Links",
+				"name" : "contact",
+				"label" : "Contact",
 				"link" : "index.html",
-				"style" : "placeholder"
+				"style" : "placeholder",
+				environment: 'contact',
 }
