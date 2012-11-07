@@ -1,16 +1,39 @@
 {
-	date : "1. April 2011",
-	author : "Michael Schilonka",
+	date : "05.11.2012",
+	author : "Robert Stein",
 	de : {
 		title : "Das CaP CMS",
-		text : "Wilkommen bei <b>CaP CMS</b>",
+		text : "Da sind wir also. Endlich. Der erste richtige Post in unserem CaP CMS. "+
+		"Hiermit kündigen wir unser baldiges Release der ersten Alpha Version von CaP an.<br> "+
+		"Aber was ist das eigentlich, CaP? CaP steht für 'Content and Property' (Engine). "+
+		"Unsere Engine baut die HTML-Seite in einem rekursivem Muster, welcher abhängig von "+
+		"den genutzeten Komponenten und ihrer Platzierung erzeugt wird. Der Administrator kann das "+
+		"Layout der Seite über eine Konfigurationsdatei verändern. Da der gesamte Inhalt dynamisch "+
+		"mit AJAX-Technologie geladen wird, kommen auf CaP besierende Seiten komplett ohne PHP und "+
+		"MySQL aus. Aufwändige Berechnungen werden auf der Seite des Clients ausgeführt. Der Inhalt der "+
+		"Seite wird von den zugehörigen Komponenten geladen und diese wiederrum werden von der "+
+		"CaP-Engine geladen und eingebaut.<br>"+
+		"Trotzdem, die Zukunft von CaP liegt in euren Händen. We brauchen qualifizierte und motivierte "+
+		"Entwickler, welche das Potenzial von CaP erkennen und uns unterstützen CaP zu verbreiten und "+
+		"kontinuierlich weiterzuentwickeln. Wenn Interesse besteht, scheut euch nicht uns unter 'Kontakt' "+
+		"zu kontaktieren. Wir würden uns freuen euch in unserem Team wilkommen zu heißen!<br><br>"+
+		"Peace out,<br>"+
+		"Robert",
 	},
 	en : {
-		title : "The CaP CMS",
-		text : "Welcome to <b>CaP CMS</b> 1st we need some more text here" +
-		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
-		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
-		"Welcome to <b>CaP CMS</b> 1st we need some more text here"+
-		"Welcome to <b>CaP CMS</b> 1st we need some more text here",
+		title : "Welcome to CaP CMS",
+		text : "So, here we are. We finally made it. The first real post in CaP CMS. "+
+		"We are thrilled to announce that we release the first alpha version of CaP "+
+		"in the near future. <br>"+
+		"But what actually is CaP? CaP stands for 'Content and Property' (Engine). "+
+		"Our engine builds the page out of a recursive pattern which depends on the "+
+		"used components and their placement. The administrator is able to configure "+
+		"the layout through a config-file. You don't need any PHP or MySQL on your server "+
+		"to run CaP. All the content is loaded dynamically by its component and the components "+
+		"are loaded by the CaP Engine itself.<br>"+
+		"Anyway the future of CaP is in your hands. We need qualified and motivated developers to "+
+		"keep CaP running and growing. Please contact us if you are interested to join our team!<br><br>"+
+		"kinds regards,<br>"+
+		"Robert",
 	},
 }
