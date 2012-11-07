@@ -64,6 +64,7 @@ var Articleviewer = new Class(
 						'-moz-border-radius-topleft' : '8px',
 						'border-top-right-radius' : '8px',
 						'border-top-left-radius' : '8px',
+						'border-bottom':'0px',
 						'vertical-align' :'bottom',
 					};
 					case "innercomment" : return {
@@ -739,7 +740,7 @@ var Articleviewer = new Class(
 				textground.setStyles({
 					'font-family': 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif',
 					'margin' : '5px',
-					'height' : '400px',
+					//'height' : '400px',
 				});
 				
 
@@ -753,7 +754,7 @@ var Articleviewer = new Class(
 				text.adopt(title);
 				text.adopt(infoborder);
 				text.adopt(textground);
-				text.adopt(this.addLabel(index));
+				text.adopt(this.addLabel(index).setStyle('margin-top','40px'));
 
 				console.log('Returning the article-element.');
 				return text;
