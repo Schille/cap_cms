@@ -14,7 +14,7 @@
 	
 	en : {
 		title : "Like!",
-		text : "So, just a message from me here. When I recently browsed vimeo and "+
+		text :"So, just a message from me here. When I recently browsed vimeo and "+
 		"YT I just found some video which I have to show you: <br>"+
 		"<center><iframe src='http://player.vimeo.com/video/46304267' width='500' height='281' frameborder='0'" +
 		"webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <br><br>"+

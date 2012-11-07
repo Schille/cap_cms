@@ -17,7 +17,7 @@ var Contact = new Class({
 
 		
 		var ground = new Element ('div', {
-			id: 'ground_about',
+			id: 'ground_contact',
 			style : 'text-align:center',
 			});
 		
