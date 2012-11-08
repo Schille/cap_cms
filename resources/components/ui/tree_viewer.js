@@ -65,8 +65,10 @@ var TreeViewer = new Class({
     		grid: true,
     		onClick: function(node){
     			var path = scope.nodes.get(node.id);
-    			if(path)
-    				alert(EnvironmentalPaths.get(scope.id) + path);
+    			if(path){
+    				
+    				UIManager.triggerAffiliatedComponents(new EventInformation(scope.id, 'home', EnvironmentalPaths.get(scope.id) + path, null));
+    			}
     		},
     	},{
     		text: 'Root',

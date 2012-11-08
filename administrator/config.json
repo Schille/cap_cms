@@ -2,7 +2,8 @@
     home:{
         register:{
             "topnavigation2.js": "nav1",
-            "tree_viewer.js": "cont"
+            "tree_viewer.js": "cont",
+            "wysiwyg.js":"wysiwyg",
         },
         layout:{
             header:{
@@ -14,11 +15,18 @@
               component : "cont",
               width:"300px",  
             },
+            center:{
+            	component: "wysiwyg",
+            },
             
         },
         paths:{
             "nav1":"content/navigation/topnavigation2/",
             "cont" : "../resources/",
+            "wysiwyg" : '../resources/'
+        },
+        affiliation : {
+        	"cont" : "wysiwyg",
         },
         
     }, 

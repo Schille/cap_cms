@@ -33,7 +33,7 @@ var WYSIWYG = new Class({
 		
 		var editor = new Element('textarea', {
 			cols : '80',
-			rows : '20',
+			rows : '30',
 			id: 'editor',
 		});
 		
@@ -142,10 +142,9 @@ var WYSIWYG = new Class({
     },
 
 	
-	performAction : function(mySender, myEnvironment,myActionName, myActionType){
+	performAction : function(myEventInformation){
 		
-		var edit = this.dataItemLoader.getDataItem(myActionName);
-		
+		var edit = this.dataItemLoader.getDataItem(myEventInformation.actionName);		
 		$('article_title').setProperty('value',edit.en.title);
 		tinyMCE.get("editor").setContent(edit.en.text);
 		
